@@ -16,10 +16,10 @@
  */
 
 
-import {MathJax} from "../../mathjax/js/components/global.js";
-import {XypicUtil} from "../util/XypicUtil.js";
-import {List} from "../fp/List.js";
-import {Frame} from "./Frames.js";
+import { MathJax } from "mathjax-full/js/components/global.js";
+import { XypicUtil } from "../util/XypicUtil.js";
+import { List } from "../fp/List.js";
+import { Frame } from "./Frames.js";
 
 
 export class Shape {
@@ -29,13 +29,13 @@ export class Shape {
 	 * @param {Graphics.SVG} svg SVG
 	 */
 	// draw function (svg) {}
-	
+
 	/**
 	 * Bounding Boxを返す。
 	 * @returns {Frame.Rect} Bounding Box (ない場合はundefined)
 	 */
 	// getBoundingBox() {}
-	
+
 	/**
 	 * 中身が空であるかどうかを返す。
 	 * @returns {boolean} true:空である、false:空でない
@@ -180,7 +180,7 @@ Shape.CircleSegmentShape = class Shape_CircleSegmentShape extends Shape {
 
 	draw(svg) {
 		svg.createSVGElement("path", {
-			d:"M" + MathJax.xypic.measure.em2px(this.sx) + "," + MathJax.xypic.measure.em2px(-this.sy) + " A" + MathJax.xypic.measure.em2px(this.r) + "," + MathJax.xypic.measure.em2px(this.r) + " 0 " + this.large + "," + this.flip + " " + MathJax.xypic.measure.em2px(this.ex) + "," + MathJax.xypic.measure.em2px(-this.ey)
+			d: "M" + MathJax.xypic.measure.em2px(this.sx) + "," + MathJax.xypic.measure.em2px(-this.sy) + " A" + MathJax.xypic.measure.em2px(this.r) + "," + MathJax.xypic.measure.em2px(this.r) + " 0 " + this.large + "," + this.flip + " " + MathJax.xypic.measure.em2px(this.ex) + "," + MathJax.xypic.measure.em2px(-this.ey)
 		});
 	}
 
@@ -205,7 +205,7 @@ Shape.FullCircleShape = class Shape_FullCircleShape extends Shape {
 
 	draw(svg) {
 		svg.createSVGElement("circle", {
-			cx:MathJax.xypic.measure.em2px(this.x), cy:MathJax.xypic.measure.em2px(-this.y), r:MathJax.xypic.measure.em2px(this.r)
+			cx: MathJax.xypic.measure.em2px(this.x), cy: MathJax.xypic.measure.em2px(-this.y), r: MathJax.xypic.measure.em2px(this.r)
 		});
 	}
 
@@ -240,11 +240,11 @@ Shape.RectangleShape = class Shape_RectangleShape extends Shape {
 	draw(svg) {
 		var def;
 		def = {
-			x:MathJax.xypic.measure.em2px(this.x - this.left), 
-			y:-MathJax.xypic.measure.em2px(this.y + this.up), 
-			width:MathJax.xypic.measure.em2px(this.left + this.right), 
-			height:MathJax.xypic.measure.em2px(this.up + this.down), 
-			rx:MathJax.xypic.measure.em2px(this.r)
+			x: MathJax.xypic.measure.em2px(this.x - this.left),
+			y: -MathJax.xypic.measure.em2px(this.y + this.up),
+			width: MathJax.xypic.measure.em2px(this.left + this.right),
+			height: MathJax.xypic.measure.em2px(this.up + this.down),
+			rx: MathJax.xypic.measure.em2px(this.r)
 		};
 		if (this.dasharray !== undefined) {
 			def["stroke-dasharray"] = this.dasharray;
@@ -260,11 +260,11 @@ Shape.RectangleShape = class Shape_RectangleShape extends Shape {
 		svg.createSVGElement("rect", def);
 		if (this.isDoubled) {
 			def = {
-				x:MathJax.xypic.measure.em2px(this.x - this.left + MathJax.xypic.measure.thickness), 
-				y:-MathJax.xypic.measure.em2px(this.y + this.up - MathJax.xypic.measure.thickness), 
-				width:MathJax.xypic.measure.em2px(this.left + this.right - 2 * MathJax.xypic.measure.thickness), 
-				height:MathJax.xypic.measure.em2px(this.up + this.down - 2 * MathJax.xypic.measure.thickness), 
-				rx:MathJax.xypic.measure.em2px(Math.max(this.r - MathJax.xypic.measure.thickness, 0))
+				x: MathJax.xypic.measure.em2px(this.x - this.left + MathJax.xypic.measure.thickness),
+				y: -MathJax.xypic.measure.em2px(this.y + this.up - MathJax.xypic.measure.thickness),
+				width: MathJax.xypic.measure.em2px(this.left + this.right - 2 * MathJax.xypic.measure.thickness),
+				height: MathJax.xypic.measure.em2px(this.up + this.down - 2 * MathJax.xypic.measure.thickness),
+				rx: MathJax.xypic.measure.em2px(Math.max(this.r - MathJax.xypic.measure.thickness, 0))
 			};
 			if (this.dasharray !== undefined) {
 				def["stroke-dasharray"] = this.dasharray;
@@ -282,7 +282,7 @@ Shape.RectangleShape = class Shape_RectangleShape extends Shape {
 	}
 
 	getBoundingBox() {
-		return new Frame.Rect(this.x, this.y, { l:this.left, r:this.right, u:this.up, d:this.down });
+		return new Frame.Rect(this.x, this.y, { l: this.left, r: this.right, u: this.up, d: this.down });
 	}
 
 	toString() {
@@ -309,10 +309,10 @@ Shape.EllipseShape = class Shape_EllipseShape extends Shape {
 	draw(svg) {
 		var def;
 		def = {
-			cx:MathJax.xypic.measure.em2px(this.x), 
-			cy:-MathJax.xypic.measure.em2px(this.y), 
-			rx:MathJax.xypic.measure.em2px(this.rx), 
-			ry:MathJax.xypic.measure.em2px(this.ry)
+			cx: MathJax.xypic.measure.em2px(this.x),
+			cy: -MathJax.xypic.measure.em2px(this.y),
+			rx: MathJax.xypic.measure.em2px(this.rx),
+			ry: MathJax.xypic.measure.em2px(this.ry)
 		};
 		if (this.dasharray !== undefined) {
 			def["stroke-dasharray"] = this.dasharray;
@@ -328,10 +328,10 @@ Shape.EllipseShape = class Shape_EllipseShape extends Shape {
 		svg.createSVGElement("ellipse", def);
 		if (this.isDoubled) {
 			def = {
-				cx:MathJax.xypic.measure.em2px(this.x), 
-				cy:-MathJax.xypic.measure.em2px(this.y), 
-				rx:MathJax.xypic.measure.em2px(Math.max(this.rx - MathJax.xypic.measure.thickness)), 
-				ry:MathJax.xypic.measure.em2px(Math.max(this.ry - MathJax.xypic.measure.thickness))
+				cx: MathJax.xypic.measure.em2px(this.x),
+				cy: -MathJax.xypic.measure.em2px(this.y),
+				rx: MathJax.xypic.measure.em2px(Math.max(this.rx - MathJax.xypic.measure.thickness)),
+				ry: MathJax.xypic.measure.em2px(Math.max(this.ry - MathJax.xypic.measure.thickness))
 			};
 			if (this.dasharray !== undefined) {
 				def["stroke-dasharray"] = this.dasharray;
@@ -349,7 +349,7 @@ Shape.EllipseShape = class Shape_EllipseShape extends Shape {
 	}
 
 	getBoundingBox() {
-		return new Frame.Rect(this.x, this.y, { l:this.rx, r:this.rx, u:this.ry, d:this.ry });
+		return new Frame.Rect(this.x, this.y, { l: this.rx, r: this.rx, u: this.ry, d: this.ry });
 	}
 
 	toString() {
@@ -381,12 +381,12 @@ Shape.BoxShadeShape = class Shape_BoxShadeShape extends Shape {
 		var d = MathJax.xypic.measure.em2px(this.down);
 		var depth = MathJax.xypic.measure.em2px(this.depth);
 		svg.createSVGElement("path", {
-			d: "M" + (x - l + depth) + "," + (-y + d) + 
-				"L" + (x + r) + "," + (-y + d) + 
-				"L" + (x + r) + "," + (-y - u + depth) + 
-				"L" + (x + r + depth) + "," + (-y - u + depth) + 
-				"L" + (x + r + depth) + "," + (-y + d + depth) + 
-				"L" + (x - l + depth) + "," + (-y + d + depth) + 
+			d: "M" + (x - l + depth) + "," + (-y + d) +
+				"L" + (x + r) + "," + (-y + d) +
+				"L" + (x + r) + "," + (-y - u + depth) +
+				"L" + (x + r + depth) + "," + (-y - u + depth) +
+				"L" + (x + r + depth) + "," + (-y + d + depth) +
+				"L" + (x - l + depth) + "," + (-y + d + depth) +
 				"Z",
 			stroke: this.color,
 			fill: this.color
@@ -394,7 +394,7 @@ Shape.BoxShadeShape = class Shape_BoxShadeShape extends Shape {
 	}
 
 	getBoundingBox() {
-		return new Frame.Rect(this.x, this.y, { l:this.left, r:this.right + this.depth, u:this.up, d:this.down + this.depth });
+		return new Frame.Rect(this.x, this.y, { l: this.left, r: this.right + this.depth, u: this.up, d: this.down + this.depth });
 	}
 
 	toString() {
@@ -419,97 +419,97 @@ Shape.LeftBrace = class Shape_LeftBrace extends Shape {
 		var scale = MathJax.xypic.measure.oneem;
 		var down = Math.max(0.759375 + 0.660375, this.down / scale * 1.125) - 0.660375;
 		var up = - Math.max(0.759375 + 0.660375, this.up / scale * 1.125) + 0.660375;
-		
+
 		var d;
-		d = "M" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(down) + 
-			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.07875 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.190125 + down) + 
-			" " + MathJax.xypic.measure.em2px(-0.0585) + " " + MathJax.xypic.measure.em2px(0.250875 + down) + 
-			"T" + MathJax.xypic.measure.em2px(-0.01125) + " " + MathJax.xypic.measure.em2px(0.387 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.55575 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.2475) + " " + MathJax.xypic.measure.em2px(0.6525 + down) + 
-			"L" + MathJax.xypic.measure.em2px(0.262125) + " " + MathJax.xypic.measure.em2px(0.660375 + down) + 
-			"L" + MathJax.xypic.measure.em2px(0.3015) + " " + MathJax.xypic.measure.em2px(0.660375 + down) + 
-			"L" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(0.653625 + down) + 
-			"V" + MathJax.xypic.measure.em2px(0.622125 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(0.60975 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.2925) + " " + MathJax.xypic.measure.em2px(0.60075 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.205875) + " " + MathJax.xypic.measure.em2px(0.541125 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.149625) + " " + MathJax.xypic.measure.em2px(0.44775 + down) + 
-			"T" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.239625 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.2385 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.073125) + " " + MathJax.xypic.measure.em2px(0.235125 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.068625) + " " + MathJax.xypic.measure.em2px(0.203625 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(0.041625 + down) + 
-			"L" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(0.75825) + 
-			"Q" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(0.496125) + 
-			" " + MathJax.xypic.measure.em2px(0.066375) + " " + MathJax.xypic.measure.em2px(0.486) + 
-			"Q" + MathJax.xypic.measure.em2px(0.05625) + " " + MathJax.xypic.measure.em2px(0.336375) + 
-			" " + MathJax.xypic.measure.em2px(-0.021375) + " " + MathJax.xypic.measure.em2px(0.212625) + 
-			"T" + MathJax.xypic.measure.em2px(-0.226125) + " " + MathJax.xypic.measure.em2px(0.010125) + 
-			"L" + MathJax.xypic.measure.em2px(-0.241875) + " 0" + 
-			"L" + MathJax.xypic.measure.em2px(-0.226125) + " " + MathJax.xypic.measure.em2px(-0.010125) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.106875) + " " + MathJax.xypic.measure.em2px(-0.084375) + 
-			" " + MathJax.xypic.measure.em2px(-0.025875) + " " + MathJax.xypic.measure.em2px(-0.207) + 
-			"T" + MathJax.xypic.measure.em2px(0.066375) + " " + MathJax.xypic.measure.em2px(-0.486) + 
-			"Q" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(-0.496125) + 
-			" " + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(-0.75825) + 
-			"L" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(-0.041625 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.068625) + " " + MathJax.xypic.measure.em2px(-0.203625 + up) + 
-			" " + MathJax.xypic.measure.em2px(0.073125) + " " + MathJax.xypic.measure.em2px(-0.235125 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.2385 + up) + 
-			" " + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.239625 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.093375) + " " + MathJax.xypic.measure.em2px(-0.354375 + up) + 
-			" " + MathJax.xypic.measure.em2px(0.149625) + " " + MathJax.xypic.measure.em2px(-0.44775 + up) + 
-			"T" + MathJax.xypic.measure.em2px(0.2925) + " " + MathJax.xypic.measure.em2px(-0.60075 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.60975 + up) + 
-			" " + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.622125 + up) + 
-			"L" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.653625 + up) + 
-			"L" + MathJax.xypic.measure.em2px(0.3015) + " " + MathJax.xypic.measure.em2px(-0.660375 + up) + 
-			"L" + MathJax.xypic.measure.em2px(0.262125) + " " + MathJax.xypic.measure.em2px(-0.660375 + up) + 
-			"L" + MathJax.xypic.measure.em2px(0.2475) + " " + MathJax.xypic.measure.em2px(-0.6525 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.55575 + up) + 
-			" " + MathJax.xypic.measure.em2px(-0.01125) + " " + MathJax.xypic.measure.em2px(-0.387 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.048375) + " " + MathJax.xypic.measure.em2px(-0.311625 + up) + 
-			" " + MathJax.xypic.measure.em2px(-0.0585) + " " + MathJax.xypic.measure.em2px(-0.250875 + up) + 
-			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(-0.07875 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(up) + 
-			" " + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(up) + 
-			"L" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(-0.759375) + 
-			"V" + MathJax.xypic.measure.em2px(-0.5985) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(-0.47925) + 
-			" " + MathJax.xypic.measure.em2px(-0.075375) + " " + MathJax.xypic.measure.em2px(-0.41175) + 
-			"T" + MathJax.xypic.measure.em2px(-0.11475) + " " + MathJax.xypic.measure.em2px(-0.27) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.133875) + " " + MathJax.xypic.measure.em2px(-0.2205) + 
-			" " + MathJax.xypic.measure.em2px(-0.160875) + " " + MathJax.xypic.measure.em2px(-0.17775) + 
-			"T" + MathJax.xypic.measure.em2px(-0.212625) + " " + MathJax.xypic.measure.em2px(-0.106875) + 
-			"T" + MathJax.xypic.measure.em2px(-0.25875) + " " + MathJax.xypic.measure.em2px(-0.06075) + 
-			"T" + MathJax.xypic.measure.em2px(-0.293625) + " " + MathJax.xypic.measure.em2px(-0.0315) + 
-			"T" + MathJax.xypic.measure.em2px(-0.307125) + " " + MathJax.xypic.measure.em2px(-0.02025) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.30825) + " " + MathJax.xypic.measure.em2px(-0.019125) + 
-			" " + MathJax.xypic.measure.em2px(-0.30825) + " 0" + 
-			"T" + MathJax.xypic.measure.em2px(-0.307125) + " " + MathJax.xypic.measure.em2px(0.02025) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.307125) + " " + MathJax.xypic.measure.em2px(0.021375) + 
-			" " + MathJax.xypic.measure.em2px(-0.284625) + " " + MathJax.xypic.measure.em2px(0.03825) + 
-			"T" + MathJax.xypic.measure.em2px(-0.2295) + " " + MathJax.xypic.measure.em2px(0.091125) + 
-			"T" + MathJax.xypic.measure.em2px(-0.162) + " " + MathJax.xypic.measure.em2px(0.176625) + 
-			"T" + MathJax.xypic.measure.em2px(-0.10125) + " " + MathJax.xypic.measure.em2px(0.30825) + 
-			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.482625) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(0.496125) + 
-			" " + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(0.759375) + 
+		d = "M" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(down) +
+			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.07875 + down) +
+			"Q" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.190125 + down) +
+			" " + MathJax.xypic.measure.em2px(-0.0585) + " " + MathJax.xypic.measure.em2px(0.250875 + down) +
+			"T" + MathJax.xypic.measure.em2px(-0.01125) + " " + MathJax.xypic.measure.em2px(0.387 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.55575 + down) +
+			" " + MathJax.xypic.measure.em2px(0.2475) + " " + MathJax.xypic.measure.em2px(0.6525 + down) +
+			"L" + MathJax.xypic.measure.em2px(0.262125) + " " + MathJax.xypic.measure.em2px(0.660375 + down) +
+			"L" + MathJax.xypic.measure.em2px(0.3015) + " " + MathJax.xypic.measure.em2px(0.660375 + down) +
+			"L" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(0.653625 + down) +
+			"V" + MathJax.xypic.measure.em2px(0.622125 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(0.60975 + down) +
+			" " + MathJax.xypic.measure.em2px(0.2925) + " " + MathJax.xypic.measure.em2px(0.60075 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.205875) + " " + MathJax.xypic.measure.em2px(0.541125 + down) +
+			" " + MathJax.xypic.measure.em2px(0.149625) + " " + MathJax.xypic.measure.em2px(0.44775 + down) +
+			"T" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.239625 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.2385 + down) +
+			" " + MathJax.xypic.measure.em2px(0.073125) + " " + MathJax.xypic.measure.em2px(0.235125 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.068625) + " " + MathJax.xypic.measure.em2px(0.203625 + down) +
+			" " + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(0.041625 + down) +
+			"L" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(0.75825) +
+			"Q" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(0.496125) +
+			" " + MathJax.xypic.measure.em2px(0.066375) + " " + MathJax.xypic.measure.em2px(0.486) +
+			"Q" + MathJax.xypic.measure.em2px(0.05625) + " " + MathJax.xypic.measure.em2px(0.336375) +
+			" " + MathJax.xypic.measure.em2px(-0.021375) + " " + MathJax.xypic.measure.em2px(0.212625) +
+			"T" + MathJax.xypic.measure.em2px(-0.226125) + " " + MathJax.xypic.measure.em2px(0.010125) +
+			"L" + MathJax.xypic.measure.em2px(-0.241875) + " 0" +
+			"L" + MathJax.xypic.measure.em2px(-0.226125) + " " + MathJax.xypic.measure.em2px(-0.010125) +
+			"Q" + MathJax.xypic.measure.em2px(-0.106875) + " " + MathJax.xypic.measure.em2px(-0.084375) +
+			" " + MathJax.xypic.measure.em2px(-0.025875) + " " + MathJax.xypic.measure.em2px(-0.207) +
+			"T" + MathJax.xypic.measure.em2px(0.066375) + " " + MathJax.xypic.measure.em2px(-0.486) +
+			"Q" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(-0.496125) +
+			" " + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(-0.75825) +
+			"L" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(-0.041625 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.068625) + " " + MathJax.xypic.measure.em2px(-0.203625 + up) +
+			" " + MathJax.xypic.measure.em2px(0.073125) + " " + MathJax.xypic.measure.em2px(-0.235125 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.2385 + up) +
+			" " + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.239625 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.093375) + " " + MathJax.xypic.measure.em2px(-0.354375 + up) +
+			" " + MathJax.xypic.measure.em2px(0.149625) + " " + MathJax.xypic.measure.em2px(-0.44775 + up) +
+			"T" + MathJax.xypic.measure.em2px(0.2925) + " " + MathJax.xypic.measure.em2px(-0.60075 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.60975 + up) +
+			" " + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.622125 + up) +
+			"L" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.653625 + up) +
+			"L" + MathJax.xypic.measure.em2px(0.3015) + " " + MathJax.xypic.measure.em2px(-0.660375 + up) +
+			"L" + MathJax.xypic.measure.em2px(0.262125) + " " + MathJax.xypic.measure.em2px(-0.660375 + up) +
+			"L" + MathJax.xypic.measure.em2px(0.2475) + " " + MathJax.xypic.measure.em2px(-0.6525 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.55575 + up) +
+			" " + MathJax.xypic.measure.em2px(-0.01125) + " " + MathJax.xypic.measure.em2px(-0.387 + up) +
+			"Q" + MathJax.xypic.measure.em2px(-0.048375) + " " + MathJax.xypic.measure.em2px(-0.311625 + up) +
+			" " + MathJax.xypic.measure.em2px(-0.0585) + " " + MathJax.xypic.measure.em2px(-0.250875 + up) +
+			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(-0.07875 + up) +
+			"Q" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(up) +
+			" " + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(up) +
+			"L" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(-0.759375) +
+			"V" + MathJax.xypic.measure.em2px(-0.5985) +
+			"Q" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(-0.47925) +
+			" " + MathJax.xypic.measure.em2px(-0.075375) + " " + MathJax.xypic.measure.em2px(-0.41175) +
+			"T" + MathJax.xypic.measure.em2px(-0.11475) + " " + MathJax.xypic.measure.em2px(-0.27) +
+			"Q" + MathJax.xypic.measure.em2px(-0.133875) + " " + MathJax.xypic.measure.em2px(-0.2205) +
+			" " + MathJax.xypic.measure.em2px(-0.160875) + " " + MathJax.xypic.measure.em2px(-0.17775) +
+			"T" + MathJax.xypic.measure.em2px(-0.212625) + " " + MathJax.xypic.measure.em2px(-0.106875) +
+			"T" + MathJax.xypic.measure.em2px(-0.25875) + " " + MathJax.xypic.measure.em2px(-0.06075) +
+			"T" + MathJax.xypic.measure.em2px(-0.293625) + " " + MathJax.xypic.measure.em2px(-0.0315) +
+			"T" + MathJax.xypic.measure.em2px(-0.307125) + " " + MathJax.xypic.measure.em2px(-0.02025) +
+			"Q" + MathJax.xypic.measure.em2px(-0.30825) + " " + MathJax.xypic.measure.em2px(-0.019125) +
+			" " + MathJax.xypic.measure.em2px(-0.30825) + " 0" +
+			"T" + MathJax.xypic.measure.em2px(-0.307125) + " " + MathJax.xypic.measure.em2px(0.02025) +
+			"Q" + MathJax.xypic.measure.em2px(-0.307125) + " " + MathJax.xypic.measure.em2px(0.021375) +
+			" " + MathJax.xypic.measure.em2px(-0.284625) + " " + MathJax.xypic.measure.em2px(0.03825) +
+			"T" + MathJax.xypic.measure.em2px(-0.2295) + " " + MathJax.xypic.measure.em2px(0.091125) +
+			"T" + MathJax.xypic.measure.em2px(-0.162) + " " + MathJax.xypic.measure.em2px(0.176625) +
+			"T" + MathJax.xypic.measure.em2px(-0.10125) + " " + MathJax.xypic.measure.em2px(0.30825) +
+			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.482625) +
+			"Q" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(0.496125) +
+			" " + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(0.759375) +
 			"Z";
 		svg.createSVGElement("path", {
-			d:d, 
-			fill:this.color, 
-			stroke:this.color, 
-			"stroke-width":"0pt", 
-			transform:"translate(" + MathJax.xypic.measure.em2px(this.x) + "," + MathJax.xypic.measure.em2px(-this.y) +") rotate(" + (-this.degree) + ") scale(" + (scale / 1.125) + ")"
+			d: d,
+			fill: this.color,
+			stroke: this.color,
+			"stroke-width": "0pt",
+			transform: "translate(" + MathJax.xypic.measure.em2px(this.x) + "," + MathJax.xypic.measure.em2px(-this.y) + ") rotate(" + (-this.degree) + ") scale(" + (scale / 1.125) + ")"
 		});
 	}
 
 	getBoundingBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return new Frame.Rect(this.x, this.y, { l:0.274 * scale, r:0.274 * scale, u:Math.max((0.759375 + 0.660375) * scale / 1.125, this.up), d:Math.max((0.759375 + 0.660375) * scale / 1.125, this.down) }).rotate(this.degree * Math.PI / 180);
+		return new Frame.Rect(this.x, this.y, { l: 0.274 * scale, r: 0.274 * scale, u: Math.max((0.759375 + 0.660375) * scale / 1.125, this.up), d: Math.max((0.759375 + 0.660375) * scale / 1.125, this.down) }).rotate(this.degree * Math.PI / 180);
 	}
 
 	toString() {
@@ -533,62 +533,62 @@ Shape.LeftParenthesis = class Shape_LeftParenthesis extends Shape {
 		var scale = MathJax.xypic.measure.oneem;
 		var down = Math.max(0.660375, this.height / 2 / scale * 1.125) - 0.660375;
 		var up = -down;
-		
+
 		var d;
-		d = "M" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(down) + 
-			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.07875 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.190125 + down) + 
-			" " + MathJax.xypic.measure.em2px(-0.0585) + " " + MathJax.xypic.measure.em2px(0.250875 + down) + 
-			"T" + MathJax.xypic.measure.em2px(-0.01125) + " " + MathJax.xypic.measure.em2px(0.387 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.55575 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.2475) + " " + MathJax.xypic.measure.em2px(0.6525 + down) + 
-			"L" + MathJax.xypic.measure.em2px(0.262125) + " " + MathJax.xypic.measure.em2px(0.660375 + down) + 
-			"L" + MathJax.xypic.measure.em2px(0.3015) + " " + MathJax.xypic.measure.em2px(0.660375 + down) + 
-			"L" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(0.653625 + down) + 
-			"V" + MathJax.xypic.measure.em2px(0.622125 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(0.60975 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.2925) + " " + MathJax.xypic.measure.em2px(0.60075 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.205875) + " " + MathJax.xypic.measure.em2px(0.541125 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.149625) + " " + MathJax.xypic.measure.em2px(0.44775 + down) + 
-			"T" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.239625 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.2385 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.073125) + " " + MathJax.xypic.measure.em2px(0.235125 + down) + 
-			"Q" + MathJax.xypic.measure.em2px(0.068625) + " " + MathJax.xypic.measure.em2px(0.203625 + down) + 
-			" " + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(0.041625 + down) + 
-			"L" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(-0.041625 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.068625) + " " + MathJax.xypic.measure.em2px(-0.203625 + up) + 
-			" " + MathJax.xypic.measure.em2px(0.073125) + " " + MathJax.xypic.measure.em2px(-0.235125 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.2385 + up) + 
-			" " + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.239625 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.093375) + " " + MathJax.xypic.measure.em2px(-0.354375 + up) + 
-			" " + MathJax.xypic.measure.em2px(0.149625) + " " + MathJax.xypic.measure.em2px(-0.44775 + up) + 
-			"T" + MathJax.xypic.measure.em2px(0.2925) + " " + MathJax.xypic.measure.em2px(-0.60075 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.60975 + up) + 
-			" " + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.622125 + up) + 
-			"L" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.653625 + up) + 
-			"L" + MathJax.xypic.measure.em2px(0.3015) + " " + MathJax.xypic.measure.em2px(-0.660375 + up) + 
-			"L" + MathJax.xypic.measure.em2px(0.262125) + " " + MathJax.xypic.measure.em2px(-0.660375 + up) + 
-			"L" + MathJax.xypic.measure.em2px(0.2475) + " " + MathJax.xypic.measure.em2px(-0.6525 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.55575 + up) + 
-			" " + MathJax.xypic.measure.em2px(-0.01125) + " " + MathJax.xypic.measure.em2px(-0.387 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.048375) + " " + MathJax.xypic.measure.em2px(-0.311625 + up) + 
-			" " + MathJax.xypic.measure.em2px(-0.0585) + " " + MathJax.xypic.measure.em2px(-0.250875 + up) + 
-			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(-0.07875 + up) + 
-			"Q" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(up) + 
-			" " + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(up) + 
+		d = "M" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(down) +
+			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.07875 + down) +
+			"Q" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(0.190125 + down) +
+			" " + MathJax.xypic.measure.em2px(-0.0585) + " " + MathJax.xypic.measure.em2px(0.250875 + down) +
+			"T" + MathJax.xypic.measure.em2px(-0.01125) + " " + MathJax.xypic.measure.em2px(0.387 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.55575 + down) +
+			" " + MathJax.xypic.measure.em2px(0.2475) + " " + MathJax.xypic.measure.em2px(0.6525 + down) +
+			"L" + MathJax.xypic.measure.em2px(0.262125) + " " + MathJax.xypic.measure.em2px(0.660375 + down) +
+			"L" + MathJax.xypic.measure.em2px(0.3015) + " " + MathJax.xypic.measure.em2px(0.660375 + down) +
+			"L" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(0.653625 + down) +
+			"V" + MathJax.xypic.measure.em2px(0.622125 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(0.60975 + down) +
+			" " + MathJax.xypic.measure.em2px(0.2925) + " " + MathJax.xypic.measure.em2px(0.60075 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.205875) + " " + MathJax.xypic.measure.em2px(0.541125 + down) +
+			" " + MathJax.xypic.measure.em2px(0.149625) + " " + MathJax.xypic.measure.em2px(0.44775 + down) +
+			"T" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.239625 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(0.2385 + down) +
+			" " + MathJax.xypic.measure.em2px(0.073125) + " " + MathJax.xypic.measure.em2px(0.235125 + down) +
+			"Q" + MathJax.xypic.measure.em2px(0.068625) + " " + MathJax.xypic.measure.em2px(0.203625 + down) +
+			" " + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(0.041625 + down) +
+			"L" + MathJax.xypic.measure.em2px(0.0675) + " " + MathJax.xypic.measure.em2px(-0.041625 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.068625) + " " + MathJax.xypic.measure.em2px(-0.203625 + up) +
+			" " + MathJax.xypic.measure.em2px(0.073125) + " " + MathJax.xypic.measure.em2px(-0.235125 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.2385 + up) +
+			" " + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.239625 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.093375) + " " + MathJax.xypic.measure.em2px(-0.354375 + up) +
+			" " + MathJax.xypic.measure.em2px(0.149625) + " " + MathJax.xypic.measure.em2px(-0.44775 + up) +
+			"T" + MathJax.xypic.measure.em2px(0.2925) + " " + MathJax.xypic.measure.em2px(-0.60075 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.60975 + up) +
+			" " + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.622125 + up) +
+			"L" + MathJax.xypic.measure.em2px(0.30825) + " " + MathJax.xypic.measure.em2px(-0.653625 + up) +
+			"L" + MathJax.xypic.measure.em2px(0.3015) + " " + MathJax.xypic.measure.em2px(-0.660375 + up) +
+			"L" + MathJax.xypic.measure.em2px(0.262125) + " " + MathJax.xypic.measure.em2px(-0.660375 + up) +
+			"L" + MathJax.xypic.measure.em2px(0.2475) + " " + MathJax.xypic.measure.em2px(-0.6525 + up) +
+			"Q" + MathJax.xypic.measure.em2px(0.07425) + " " + MathJax.xypic.measure.em2px(-0.55575 + up) +
+			" " + MathJax.xypic.measure.em2px(-0.01125) + " " + MathJax.xypic.measure.em2px(-0.387 + up) +
+			"Q" + MathJax.xypic.measure.em2px(-0.048375) + " " + MathJax.xypic.measure.em2px(-0.311625 + up) +
+			" " + MathJax.xypic.measure.em2px(-0.0585) + " " + MathJax.xypic.measure.em2px(-0.250875 + up) +
+			"T" + MathJax.xypic.measure.em2px(-0.068625) + " " + MathJax.xypic.measure.em2px(-0.07875 + up) +
+			"Q" + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(up) +
+			" " + MathJax.xypic.measure.em2px(-0.0675) + " " + MathJax.xypic.measure.em2px(up) +
 			"Z";
 		svg.createSVGElement("path", {
-			d:d, 
-			fill:this.color, 
-			stroke:this.color, 
-			"stroke-width":"0pt", 
-			transform:"translate(" + MathJax.xypic.measure.em2px(this.x) + "," + MathJax.xypic.measure.em2px(-this.y) +") rotate(" + (-this.degree) + ") scale(" + (scale / 1.125) + ")"
+			d: d,
+			fill: this.color,
+			stroke: this.color,
+			"stroke-width": "0pt",
+			transform: "translate(" + MathJax.xypic.measure.em2px(this.x) + "," + MathJax.xypic.measure.em2px(-this.y) + ") rotate(" + (-this.degree) + ") scale(" + (scale / 1.125) + ")"
 		});
 	}
 
 	getBoundingBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return new Frame.Rect(this.x, this.y, { l:0.06 * scale, r:0.274 * scale, u:Math.max(0.660375 * scale / 1.125, this.height / 2), d:Math.max(0.660375 * scale / 1.125, this.height / 2) }).rotate(this.degree * Math.PI / 180);
+		return new Frame.Rect(this.x, this.y, { l: 0.06 * scale, r: 0.274 * scale, u: Math.max(0.660375 * scale / 1.125, this.height / 2), d: Math.max(0.660375 * scale / 1.125, this.height / 2) }).rotate(this.degree * Math.PI / 180);
 	}
 
 	toString() {
@@ -618,7 +618,7 @@ Shape.TextShape = class Shape_TextShape extends Shape {
 	getOriginalReferencePoint() {
 		this.getBoundingBox();
 		var originalBBox = this.originalBBox;
-		
+
 		var c = this.c;
 		var H = originalBBox.H;
 		var D = originalBBox.D;
@@ -696,7 +696,7 @@ Shape.GT2ArrowheadShape = class Shape_GT2ArrowheadShape extends Shape.ArrowheadS
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.456 * scale, r:0, d:0.229 * scale, u:0.229 * scale };
+		return { l: 0.456 * scale, r: 0, d: 0.229 * scale, u: 0.229 * scale };
 	}
 
 	getRadius() {
@@ -709,10 +709,10 @@ Shape.GT2ArrowheadShape = class Shape_GT2ArrowheadShape extends Shape.ArrowheadS
 		var gu = svg.createGroup(svg.transformBuilder().rotateDegree(-10));
 		var gd = svg.createGroup(svg.transformBuilder().rotateDegree(10));
 		gu.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + ","+MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -729,7 +729,7 @@ Shape.GT3ArrowheadShape = class Shape_GT3ArrowheadShape extends Shape.ArrowheadS
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.507 * scale, r:0, d:0.268 * scale, u:0.268 * scale };
+		return { l: 0.507 * scale, r: 0, d: 0.268 * scale, u: 0.268 * scale };
 	}
 
 	getRadius() {
@@ -742,13 +742,13 @@ Shape.GT3ArrowheadShape = class Shape_GT3ArrowheadShape extends Shape.ArrowheadS
 		var gu = svg.createGroup(svg.transformBuilder().rotateDegree(-15));
 		var gd = svg.createGroup(svg.transformBuilder().rotateDegree(15));
 		gu.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:MathJax.xypic.measure.em2px(-0.507 * scale), y2:0
+			x1: 0, y1: 0, x2: MathJax.xypic.measure.em2px(-0.507 * scale), y2: 0
 		});
 		gd.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -765,13 +765,13 @@ Shape.UpperGTArrowheadShape = class Shape_UpperGTArrowheadShape extends Shape.Ar
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.489 * scale, r:0, d:0, u:0.147 * scale };
+		return { l: 0.489 * scale, r: 0, d: 0, u: 0.147 * scale };
 	}
 
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 	}
 };
@@ -788,13 +788,13 @@ Shape.LowerGTArrowheadShape = class Shape_LowerGTArrowheadShape extends Shape.Ar
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.489 * scale, r:0, d:0.147 * scale, u:0 };
+		return { l: 0.489 * scale, r: 0, d: 0.147 * scale, u: 0 };
 	}
 
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -811,16 +811,16 @@ Shape.GTArrowheadShape = class Shape_GTArrowheadShape extends Shape.ArrowheadSha
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.489 * scale, r:0, d:0.147 * scale, u:0.147 * scale };
+		return { l: 0.489 * scale, r: 0, d: 0.147 * scale, u: 0.147 * scale };
 	}
 
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 	}
 };
@@ -837,7 +837,7 @@ Shape.LT2ArrowheadShape = class Shape_LT2ArrowheadShape extends Shape.ArrowheadS
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.456 * scale, d:0.229 * scale, u:0.229  * scale };
+		return { l: 0, r: 0.456 * scale, d: 0.229 * scale, u: 0.229 * scale };
 	}
 
 	getRadius() {
@@ -847,13 +847,13 @@ Shape.LT2ArrowheadShape = class Shape_LT2ArrowheadShape extends Shape.ArrowheadS
 
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
-		var gu = svg.createGroup(svg.transformBuilder().rotateDegree(10)); 
+		var gu = svg.createGroup(svg.transformBuilder().rotateDegree(10));
 		var gd = svg.createGroup(svg.transformBuilder().rotateDegree(-10));
 		gu.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -870,7 +870,7 @@ Shape.LT3ArrowheadShape = class Shape_LT3ArrowheadShape extends Shape.ArrowheadS
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.507 * scale, d:0.268 * scale, u:0.268 * scale };
+		return { l: 0, r: 0.507 * scale, d: 0.268 * scale, u: 0.268 * scale };
 	}
 
 	getRadius() {
@@ -883,13 +883,13 @@ Shape.LT3ArrowheadShape = class Shape_LT3ArrowheadShape extends Shape.ArrowheadS
 		var gu = svg.createGroup(svg.transformBuilder().rotateDegree(15));
 		var gd = svg.createGroup(svg.transformBuilder().rotateDegree(-15));
 		gu.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:MathJax.xypic.measure.em2px(0.507 * scale), y2:0
+			x1: 0, y1: 0, x2: MathJax.xypic.measure.em2px(0.507 * scale), y2: 0
 		});
 		gd.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -906,13 +906,13 @@ Shape.UpperLTArrowheadShape = class Shape_UpperLTArrowheadShape extends Shape.Ar
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.489 * scale, d:0, u:0.147 * scale };
+		return { l: 0, r: 0.489 * scale, d: 0, u: 0.147 * scale };
 	}
 
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 	}
 };
@@ -929,13 +929,13 @@ Shape.LowerLTArrowheadShape = class Shape_LowerLTArrowheadShape extends Shape.Ar
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.489 * scale, d:0.147 * scale, u:0 };
+		return { l: 0, r: 0.489 * scale, d: 0.147 * scale, u: 0 };
 	}
 
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -952,16 +952,16 @@ Shape.LTArrowheadShape = class Shape_LTArrowheadShape extends Shape.ArrowheadSha
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.489 * scale, d:0.147 * scale, u:0.147 * scale };
+		return { l: 0, r: 0.489 * scale, d: 0.147 * scale, u: 0.147 * scale };
 	}
 
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -977,13 +977,13 @@ Shape.UpperColumnArrowheadShape = class Shape_UpperColumnArrowheadShape extends 
 	}
 
 	getBox() {
-		return { l:0, r:0, u:MathJax.xypic.measure.lineElementLength, d:0 };
+		return { l: 0, r: 0, u: MathJax.xypic.measure.lineElementLength, d: 0 };
 	}
 
 	drawDelegate(svg) {
 		var l = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:0, y2:-l
+			x1: 0, y1: 0, x2: 0, y2: -l
 		});
 	}
 };
@@ -999,13 +999,13 @@ Shape.LowerColumnArrowheadShape = class Shape_LowerColumnArrowheadShape extends 
 	}
 
 	getBox() {
-		return { l:0, r:0, u:0, d:MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: 0, u: 0, d: MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var l = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:0, y2:l
+			x1: 0, y1: 0, x2: 0, y2: l
 		});
 	}
 };
@@ -1021,13 +1021,13 @@ Shape.Column2ArrowheadShape = class Shape_Column2ArrowheadShape extends Shape.Ar
 	}
 
 	getBox() {
-		return { l:0, r:0, u:0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness), d:0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness) };
+		return { l: 0, r: 0, u: 0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness), d: 0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness) };
 	}
 
 	drawDelegate(svg) {
 		var l = MathJax.xypic.measure.em2px(0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness));
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 	}
 };
@@ -1043,13 +1043,13 @@ Shape.Column3ArrowheadShape = class Shape_Column3ArrowheadShape extends Shape.Ar
 	}
 
 	getBox() {
-		return { l:0, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness, d:0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness };
+		return { l: 0, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness, d: 0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 	}
 };
@@ -1065,14 +1065,14 @@ Shape.ColumnArrowheadShape = class Shape_ColumnArrowheadShape extends Shape.Arro
 	}
 
 	getBox() {
-		return { l:0, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 	}
 };
@@ -1088,14 +1088,14 @@ Shape.UpperLParenArrowheadShape = class Shape_UpperLParenArrowheadShape extends 
 	}
 
 	getBox() {
-		return { l:0.5 * MathJax.xypic.measure.lineElementLength, r:0, u:MathJax.xypic.measure.lineElementLength, d:0 };
+		return { l: 0.5 * MathJax.xypic.measure.lineElementLength, r: 0, u: MathJax.xypic.measure.lineElementLength, d: 0 };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M0,0 A " + r + "," + r + " 0 0,1 0," + (-2 * r)
+			d: "M0,0 A " + r + "," + r + " 0 0,1 0," + (-2 * r)
 		});
 	}
 };
@@ -1111,14 +1111,14 @@ Shape.LowerLParenArrowheadShape = class Shape_LowerLParenArrowheadShape extends 
 	}
 
 	getBox() {
-		return { l:0.5 * MathJax.xypic.measure.lineElementLength, r:0, u:0, d:MathJax.xypic.measure.lineElementLength };
+		return { l: 0.5 * MathJax.xypic.measure.lineElementLength, r: 0, u: 0, d: MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M0,0 A " + r + "," + r + " 0 0,0 0," + (2 * r)
+			d: "M0,0 A " + r + "," + r + " 0 0,0 0," + (2 * r)
 		});
 	}
 };
@@ -1134,14 +1134,14 @@ Shape.LParenArrowheadShape = class Shape_LParenArrowheadShape extends Shape.Arro
 	}
 
 	getBox() {
-		return { l:0, r:0.5 * MathJax.xypic.measure.lineElementLength, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: 0.5 * MathJax.xypic.measure.lineElementLength, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M" + r + "," + (-r) + " A " + r + "," + r + " 0 0,0 " + r + "," + r
+			d: "M" + r + "," + (-r) + " A " + r + "," + r + " 0 0,0 " + r + "," + r
 		});
 	}
 };
@@ -1157,14 +1157,14 @@ Shape.UpperRParenArrowheadShape = class Shape_UpperRParenArrowheadShape extends 
 	}
 
 	getBox() {
-		return { l:0, r:0.5 * MathJax.xypic.measure.lineElementLength, u:MathJax.xypic.measure.lineElementLength, d:0 };
+		return { l: 0, r: 0.5 * MathJax.xypic.measure.lineElementLength, u: MathJax.xypic.measure.lineElementLength, d: 0 };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M0,0 A " + r + "," + r + " 0 0,0 0," + (-2 * r)
+			d: "M0,0 A " + r + "," + r + " 0 0,0 0," + (-2 * r)
 		});
 	}
 };
@@ -1180,14 +1180,14 @@ Shape.LowerRParenArrowheadShape = class Shape_LowerRParenArrowheadShape extends 
 	}
 
 	getBox() {
-		return { l:0, r:0.5 * MathJax.xypic.measure.lineElementLength, u:0, d:MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: 0.5 * MathJax.xypic.measure.lineElementLength, u: 0, d: MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M0,0 A " + r + "," + r + " 0 0,1 0," + (2 * r)
+			d: "M0,0 A " + r + "," + r + " 0 0,1 0," + (2 * r)
 		});
 	}
 };
@@ -1203,14 +1203,14 @@ Shape.RParenArrowheadShape = class Shape_RParenArrowheadShape extends Shape.Arro
 	}
 
 	getBox() {
-		return { l:0.5 * MathJax.xypic.measure.lineElementLength, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0.5 * MathJax.xypic.measure.lineElementLength, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M" + (-r) + "," + (-r) + " A " + r + "," + r + " 0 0,1 " + (-r) + "," + r
+			d: "M" + (-r) + "," + (-r) + " A " + r + "," + r + " 0 0,1 " + (-r) + "," + r
 		});
 	}
 };
@@ -1226,14 +1226,14 @@ Shape.LowerBackquoteArrowheadShape = class Shape_LowerBackquoteArrowheadShape ex
 	}
 
 	getBox() {
-		return { l:0.5 * MathJax.xypic.measure.lineElementLength, r:0, u:0, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0.5 * MathJax.xypic.measure.lineElementLength, r: 0, u: 0, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M0,0 A " + r + "," + r + " 0 0,0 " + (-r) + "," + (r)
+			d: "M0,0 A " + r + "," + r + " 0 0,0 " + (-r) + "," + (r)
 		});
 	}
 };
@@ -1249,14 +1249,14 @@ Shape.UpperBackquoteArrowheadShape = class Shape_UpperBackquoteArrowheadShape ex
 	}
 
 	getBox() {
-		return { l:0.5 * MathJax.xypic.measure.lineElementLength, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0 };
+		return { l: 0.5 * MathJax.xypic.measure.lineElementLength, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0 };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M0,0 A " + r + "," + r + " 0 0,1 " + (-r) + "," + (-r)
+			d: "M0,0 A " + r + "," + r + " 0 0,1 " + (-r) + "," + (-r)
 		});
 	}
 };
@@ -1272,14 +1272,14 @@ Shape.LowerQuoteArrowheadShape = class Shape_LowerQuoteArrowheadShape extends Sh
 	}
 
 	getBox() {
-		return { l:0, r:0.5 * MathJax.xypic.measure.lineElementLength, u:0, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: 0.5 * MathJax.xypic.measure.lineElementLength, u: 0, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M0,0 A " + r + "," + r + " 0 0,1 " + r + "," + (r)
+			d: "M0,0 A " + r + "," + r + " 0 0,1 " + r + "," + (r)
 		});
 	}
 };
@@ -1295,14 +1295,14 @@ Shape.UpperQuoteArrowheadShape = class Shape_UpperQuoteArrowheadShape extends Sh
 	}
 
 	getBox() {
-		return { l:0, r:0.5 * MathJax.xypic.measure.lineElementLength, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0 };
+		return { l: 0, r: 0.5 * MathJax.xypic.measure.lineElementLength, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0 };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var r = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("path", {
-			d:"M0,0 A " + r + "," + r + " 0 0,0 " + r + "," + (-r)
+			d: "M0,0 A " + r + "," + r + " 0 0,0 " + r + "," + (-r)
 		});
 	}
 };
@@ -1318,12 +1318,12 @@ Shape.AsteriskArrowheadShape = class Shape_AsteriskArrowheadShape extends Shape.
 	}
 
 	getBox() {
-		return { l:MathJax.xypic.measure.thickness, r:MathJax.xypic.measure.thickness, u:MathJax.xypic.measure.thickness, d:MathJax.xypic.measure.thickness };
+		return { l: MathJax.xypic.measure.thickness, r: MathJax.xypic.measure.thickness, u: MathJax.xypic.measure.thickness, d: MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		svg.createSVGElement("circle", {
-			cx:0, cy:0, r:MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness),
+			cx: 0, cy: 0, r: MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness),
 			fill: "currentColor"
 		});
 	}
@@ -1340,12 +1340,12 @@ Shape.OArrowheadShape = class Shape_OArrowheadShape extends Shape.ArrowheadShape
 	}
 
 	getBox() {
-		return { l:MathJax.xypic.measure.thickness, r:MathJax.xypic.measure.thickness, u:MathJax.xypic.measure.thickness, d:MathJax.xypic.measure.thickness };
+		return { l: MathJax.xypic.measure.thickness, r: MathJax.xypic.measure.thickness, u: MathJax.xypic.measure.thickness, d: MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		svg.createSVGElement("circle", {
-			cx:0, cy:0, r:MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness)
+			cx: 0, cy: 0, r: MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness)
 		});
 	}
 };
@@ -1361,17 +1361,17 @@ Shape.PlusArrowheadShape = class Shape_PlusArrowheadShape extends Shape.Arrowhea
 	}
 
 	getBox() {
-		return { l:0.5 * MathJax.xypic.measure.lineElementLength, r:0.5 * MathJax.xypic.measure.lineElementLength, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0.5 * MathJax.xypic.measure.lineElementLength, r: 0.5 * MathJax.xypic.measure.lineElementLength, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var halfLen = MathJax.xypic.measure.lineElementLength / 2;
 		var halfLenPx = MathJax.xypic.measure.em2px(halfLen);
 		svg.createSVGElement("line", {
-			x1:-halfLenPx, y1:0, x2:halfLenPx, y2:0
+			x1: -halfLenPx, y1: 0, x2: halfLenPx, y2: 0
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:halfLenPx, x2:0, y2:-halfLenPx
+			x1: 0, y1: halfLenPx, x2: 0, y2: -halfLenPx
 		});
 	}
 };
@@ -1387,17 +1387,17 @@ Shape.XArrowheadShape = class Shape_XArrowheadShape extends Shape.ArrowheadShape
 	}
 
 	getBox() {
-		return { l:0.5 * MathJax.xypic.measure.lineElementLength, r:0.5 * MathJax.xypic.measure.lineElementLength, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0.5 * MathJax.xypic.measure.lineElementLength, r: 0.5 * MathJax.xypic.measure.lineElementLength, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var halfLen = MathJax.xypic.measure.lineElementLength / 2;
 		var halfLenPx = MathJax.xypic.measure.em2px(halfLen);
 		svg.createSVGElement("line", {
-			x1:-halfLenPx, y1:0, x2:halfLenPx, y2:0
+			x1: -halfLenPx, y1: 0, x2: halfLenPx, y2: 0
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:halfLenPx, x2:0, y2:-halfLenPx
+			x1: 0, y1: halfLenPx, x2: 0, y2: -halfLenPx
 		});
 	}
 };
@@ -1413,14 +1413,14 @@ Shape.SlashArrowheadShape = class Shape_SlashArrowheadShape extends Shape.Arrowh
 	}
 
 	getBox() {
-		return { l:0, r:0, u:MathJax.xypic.measure.lineElementLength / 2, d:MathJax.xypic.measure.lineElementLength / 2 };
+		return { l: 0, r: 0, u: MathJax.xypic.measure.lineElementLength / 2, d: MathJax.xypic.measure.lineElementLength / 2 };
 	}
 
 	drawDelegate(svg) {
 		var halfLen = MathJax.xypic.measure.lineElementLength / 2;
 		var halfLenPx = MathJax.xypic.measure.em2px(halfLen);
 		svg.createSVGElement("line", {
-			x1:0, y1:halfLenPx, x2:0, y2:-halfLenPx
+			x1: 0, y1: halfLenPx, x2: 0, y2: -halfLenPx
 		});
 	}
 };
@@ -1436,20 +1436,20 @@ Shape.Line3ArrowheadShape = class Shape_Line3ArrowheadShape extends Shape.Arrowh
 	}
 
 	getBox() {
-		return { l:0, r:MathJax.xypic.measure.lineElementLength, u:MathJax.xypic.measure.thickness, d:MathJax.xypic.measure.thickness };
+		return { l: 0, r: MathJax.xypic.measure.lineElementLength, u: MathJax.xypic.measure.thickness, d: MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		var vshift = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		svg.createSVGElement("line", {
-			x1:0, y1:vshift, x2:lineLen, y2:vshift
+			x1: 0, y1: vshift, x2: lineLen, y2: vshift
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:lineLen, y2:0
+			x1: 0, y1: 0, x2: lineLen, y2: 0
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:-vshift, x2:lineLen, y2:-vshift
+			x1: 0, y1: -vshift, x2: lineLen, y2: -vshift
 		});
 	}
 };
@@ -1465,17 +1465,17 @@ Shape.Line2ArrowheadShape = class Shape_Line2ArrowheadShape extends Shape.Arrowh
 	}
 
 	getBox() {
-		return { l:0, r:MathJax.xypic.measure.lineElementLength, u:0.5 * MathJax.xypic.measure.thickness, d:0.5 * MathJax.xypic.measure.thickness };
+		return { l: 0, r: MathJax.xypic.measure.lineElementLength, u: 0.5 * MathJax.xypic.measure.thickness, d: 0.5 * MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		var vshift = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.thickness);
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:vshift, x2:lineLen, y2:vshift
+			x1: 0, y1: vshift, x2: lineLen, y2: vshift
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:-vshift, x2:lineLen, y2:-vshift
+			x1: 0, y1: -vshift, x2: lineLen, y2: -vshift
 		});
 	}
 };
@@ -1491,13 +1491,13 @@ Shape.LineArrowheadShape = class Shape_LineArrowheadShape extends Shape.Arrowhea
 	}
 
 	getBox() {
-		return { l:0, r:MathJax.xypic.measure.lineElementLength, u:0, d:0 };
+		return { l: 0, r: MathJax.xypic.measure.lineElementLength, u: 0, d: 0 };
 	}
 
 	drawDelegate(svg) {
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:lineLen, y2:0
+			x1: 0, y1: 0, x2: lineLen, y2: 0
 		});
 	}
 };
@@ -1513,7 +1513,7 @@ Shape.Dot3ArrowheadShape = class Shape_Dot3ArrowheadShape extends Shape.Arrowhea
 	}
 
 	getBox() {
-		return { l:0, r:0, u:MathJax.xypic.measure.thickness, d:MathJax.xypic.measure.thickness };
+		return { l: 0, r: 0, u: MathJax.xypic.measure.thickness, d: MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
@@ -1522,18 +1522,18 @@ Shape.Dot3ArrowheadShape = class Shape_Dot3ArrowheadShape extends Shape.Arrowhea
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		var dasharray = MathJax.xypic.measure.dottedDasharray;
 		svg.createSVGElement("line", {
-			x1:0, y1:vshift, x2:lineLen, y2:vshift,
+			x1: 0, y1: vshift, x2: lineLen, y2: vshift,
 			"stroke-dasharray": dasharray
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:lineLen, y2:0,
+			x1: 0, y1: 0, x2: lineLen, y2: 0,
 			"stroke-dasharray": dasharray
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:-vshift, x2:lineLen, y2:-vshift,
+			x1: 0, y1: -vshift, x2: lineLen, y2: -vshift,
 			"stroke-dasharray": dasharray
 		});
-		
+
 	}
 };
 
@@ -1548,7 +1548,7 @@ Shape.Dot2ArrowheadShape = class Shape_Dot2ArrowheadShape extends Shape.Arrowhea
 	}
 
 	getBox() {
-		return { l:0, r:0, u:0.5 * MathJax.xypic.measure.thickness, d:0.5 * MathJax.xypic.measure.thickness };
+		return { l: 0, r: 0, u: 0.5 * MathJax.xypic.measure.thickness, d: 0.5 * MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
@@ -1556,12 +1556,12 @@ Shape.Dot2ArrowheadShape = class Shape_Dot2ArrowheadShape extends Shape.Arrowhea
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		var dasharray = MathJax.xypic.measure.dottedDasharray;
 		svg.createSVGElement("line", {
-			x1:0, y1:vshift, x2:lineLen, y2:vshift,
-		"stroke-dasharray": dasharray
+			x1: 0, y1: vshift, x2: lineLen, y2: vshift,
+			"stroke-dasharray": dasharray
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:-vshift, x2:lineLen, y2:-vshift,
-		"stroke-dasharray": dasharray
+			x1: 0, y1: -vshift, x2: lineLen, y2: -vshift,
+			"stroke-dasharray": dasharray
 		});
 	}
 };
@@ -1577,7 +1577,7 @@ Shape.DotArrowheadShape = class Shape_DotArrowheadShape extends Shape.ArrowheadS
 	}
 
 	getBox() {
-		return { l:0, r:0, u:0, d:0 };
+		return { l: 0, r: 0, u: 0, d: 0 };
 	}
 
 	drawDelegate(svg) {
@@ -1585,7 +1585,7 @@ Shape.DotArrowheadShape = class Shape_DotArrowheadShape extends Shape.ArrowheadS
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		var dasharray = MathJax.xypic.measure.dottedDasharray;
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:lineLen, y2:0,
+			x1: 0, y1: 0, x2: lineLen, y2: 0,
 			"stroke-dasharray": dasharray
 		});
 	}
@@ -1602,21 +1602,21 @@ Shape.Tilde3ArrowheadShape = class Shape_Tilde3ArrowheadShape extends Shape.Arro
 	}
 
 	getBox() {
-		return { l:-2 * MathJax.xypic.measure.thickness, r:2 * MathJax.xypic.measure.thickness, u:2 * MathJax.xypic.measure.thickness, d:2* MathJax.xypic.measure.thickness };
+		return { l: -2 * MathJax.xypic.measure.thickness, r: 2 * MathJax.xypic.measure.thickness, u: 2 * MathJax.xypic.measure.thickness, d: 2 * MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		var s = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		svg.createSVGElement("path", {
-			d:"M" + (-2 * s) + "," + s + 
-				" Q" + (-s) + ",0" + 
+			d: "M" + (-2 * s) + "," + s +
+				" Q" + (-s) + ",0" +
 				" 0," + s +
-				" T" + (2 * s) + "," + s + 
-				"M" + (-2 * s) + ",0" + 
+				" T" + (2 * s) + "," + s +
+				"M" + (-2 * s) + ",0" +
 				" Q" + (-s) + "," + (-s) +
 				" 0,0" +
-				" T" + (2 * s) + ",0" + 
-				"M" + (-2 * s) + "," + (-s) + 
+				" T" + (2 * s) + ",0" +
+				"M" + (-2 * s) + "," + (-s) +
 				" Q" + (-s) + "," + (-2 * s) +
 				" 0," + (-s) +
 				" T" + (2 * s) + "," + (-s)
@@ -1635,17 +1635,17 @@ Shape.Tilde2ArrowheadShape = class Shape_Tilde2ArrowheadShape extends Shape.Arro
 	}
 
 	getBox() {
-		return { l:-2 * MathJax.xypic.measure.thickness, r:2 * MathJax.xypic.measure.thickness, u:1.5 * MathJax.xypic.measure.thickness, d:1.5 * MathJax.xypic.measure.thickness };
+		return { l: -2 * MathJax.xypic.measure.thickness, r: 2 * MathJax.xypic.measure.thickness, u: 1.5 * MathJax.xypic.measure.thickness, d: 1.5 * MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		var s = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		svg.createSVGElement("path", {
-			d:"M" + (-2 * s) + "," + (0.5 * s) + 
+			d: "M" + (-2 * s) + "," + (0.5 * s) +
 				" Q" + (-s) + "," + (-0.5 * s) +
 				" 0," + (0.5 * s) +
-				" T" + (2 * s) + "," + (0.5 * s) + 
-				"M" + (-2 * s) + "," + (-0.5 * s) + 
+				" T" + (2 * s) + "," + (0.5 * s) +
+				"M" + (-2 * s) + "," + (-0.5 * s) +
 				" Q" + (-s) + "," + (-1.5 * s) +
 				" 0," + (-0.5 * s) +
 				" T" + (2 * s) + "," + (-0.5 * s)
@@ -1664,13 +1664,13 @@ Shape.TildeArrowheadShape = class Shape_TildeArrowheadShape extends Shape.Arrowh
 	}
 
 	getBox() {
-		return { l:-2 * MathJax.xypic.measure.thickness, r:2 * MathJax.xypic.measure.thickness, u:MathJax.xypic.measure.thickness, d:MathJax.xypic.measure.thickness };
+		return { l: -2 * MathJax.xypic.measure.thickness, r: 2 * MathJax.xypic.measure.thickness, u: MathJax.xypic.measure.thickness, d: MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		var s = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		svg.createSVGElement("path", {
-			d:"M" + (-2 * s) + ",0" + 
+			d: "M" + (-2 * s) + ",0" +
 				" Q" + (-s) + "," + (-s) +
 				" 0,0" +
 				" T" + (2 * s) + ",0"
@@ -1689,13 +1689,13 @@ Shape.TildeArrowheadShape = class Shape_TildeArrowheadShape extends Shape.Arrowh
 	}
 
 	getBox() {
-		return { l:-2 * MathJax.xypic.measure.thickness, r:2 * MathJax.xypic.measure.thickness, u:MathJax.xypic.measure.thickness, d:MathJax.xypic.measure.thickness };
+		return { l: -2 * MathJax.xypic.measure.thickness, r: 2 * MathJax.xypic.measure.thickness, u: MathJax.xypic.measure.thickness, d: MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		var s = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		svg.createSVGElement("path", {
-			d:"M" + (-2 * s) + ",0" + 
+			d: "M" + (-2 * s) + ",0" +
 				" Q" + (-s) + "," + (-s) +
 				" 0,0" +
 				" T" + (2 * s) + ",0"
@@ -1714,7 +1714,7 @@ Shape.GTGTArrowheadShape = class Shape_GTGTArrowheadShape extends Shape.Arrowhea
 	}
 
 	getBox() {
-		var scale = MathJax.xypic.measure.oneem; return { l:0.489 * scale + 2 * MathJax.xypic.measure.thickness, r:0, d:0.147 * scale, u:0.147 * scale };
+		var scale = MathJax.xypic.measure.oneem; return { l: 0.489 * scale + 2 * MathJax.xypic.measure.thickness, r: 0, d: 0.147 * scale, u: 0.147 * scale };
 	}
 
 	drawDelegate(svg) {
@@ -1722,16 +1722,16 @@ Shape.GTGTArrowheadShape = class Shape_GTGTArrowheadShape extends Shape.Arrowhea
 		var t = MathJax.xypic.measure.thickness;
 		var hshift = MathJax.xypic.measure.em2px(2 * t);
 		svg.createSVGElement("path", {
-			d:"M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 	}
 };
@@ -1748,7 +1748,7 @@ Shape.UpperGTGTArrowheadShape = class Shape_UpperGTGTArrowheadShape extends Shap
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.489 * scale + 2 * MathJax.xypic.measure.thickness, r:0, d:0, u:0.147 * scale };
+		return { l: 0.489 * scale + 2 * MathJax.xypic.measure.thickness, r: 0, d: 0, u: 0.147 * scale };
 	}
 
 	drawDelegate(svg) {
@@ -1756,10 +1756,10 @@ Shape.UpperGTGTArrowheadShape = class Shape_UpperGTGTArrowheadShape extends Shap
 		var t = MathJax.xypic.measure.thickness;
 		var hshift = MathJax.xypic.measure.em2px(2 * t);
 		svg.createSVGElement("path", {
-			d:"M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 	}
 };
@@ -1776,7 +1776,7 @@ Shape.LowerGTGTArrowheadShape = class Shape_LowerGTGTArrowheadShape extends Shap
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.489 * scale + 2 * MathJax.xypic.measure.thickness, r:0, d:0.147 * scale, u:0 };
+		return { l: 0.489 * scale + 2 * MathJax.xypic.measure.thickness, r: 0, d: 0.147 * scale, u: 0 };
 	}
 
 	drawDelegate(svg) {
@@ -1784,10 +1784,10 @@ Shape.LowerGTGTArrowheadShape = class Shape_LowerGTGTArrowheadShape extends Shap
 		var t = MathJax.xypic.measure.thickness;
 		var hshift = MathJax.xypic.measure.em2px(2 * t);
 		svg.createSVGElement("path", {
-			d:"M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -1804,7 +1804,7 @@ Shape.GTGT2ArrowheadShape = class Shape_GTGT2ArrowheadShape extends Shape.Arrowh
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.456 * scale + 2 * MathJax.xypic.measure.thickness, r:0, d:0.229 * scale, u:0.229 * scale };
+		return { l: 0.456 * scale + 2 * MathJax.xypic.measure.thickness, r: 0, d: 0.229 * scale, u: 0.229 * scale };
 	}
 
 	getRadius() {
@@ -1818,18 +1818,18 @@ Shape.GTGT2ArrowheadShape = class Shape_GTGT2ArrowheadShape extends Shape.Arrowh
 		var gu1 = svg.createGroup(svg.transformBuilder().rotateDegree(-10));
 		var gd1 = svg.createGroup(svg.transformBuilder().rotateDegree(10));
 		gu1.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd1.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + ","+MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		var gu2 = svg.createGroup(svg.transformBuilder().translate(-2 * t, 0).rotateDegree(-10));
 		var gd2 = svg.createGroup(svg.transformBuilder().translate(-2 * t, 0).rotateDegree(10));
 		gu2.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd2.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + ","+MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -1846,7 +1846,7 @@ Shape.GTGT3ArrowheadShape = class Shape_GTGT3ArrowheadShape extends Shape.Arrowh
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.507 * scale + 2 * MathJax.xypic.measure.thickness, r:0, d:0.268 * scale, u:0.268 * scale };
+		return { l: 0.507 * scale + 2 * MathJax.xypic.measure.thickness, r: 0, d: 0.268 * scale, u: 0.268 * scale };
 	}
 
 	getRadius() {
@@ -1860,21 +1860,21 @@ Shape.GTGT3ArrowheadShape = class Shape_GTGT3ArrowheadShape extends Shape.Arrowh
 		var gu1 = svg.createGroup(svg.transformBuilder().rotateDegree(-15));
 		var gd1 = svg.createGroup(svg.transformBuilder().rotateDegree(15));
 		gu1.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd1.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + ","+MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		var gu2 = svg.createGroup(svg.transformBuilder().translate(-2 * t, 0).rotateDegree(-15));
 		var gd2 = svg.createGroup(svg.transformBuilder().translate(-2 * t, 0).rotateDegree(15));
 		gu2.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd2.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + ","+MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:MathJax.xypic.measure.em2px(-0.507 * scale - 2 * t), y2:0
+			x1: 0, y1: 0, x2: MathJax.xypic.measure.em2px(-0.507 * scale - 2 * t), y2: 0
 		});
 	}
 };
@@ -1891,7 +1891,7 @@ Shape.LTLTArrowheadShape = class Shape_LTLTArrowheadShape extends Shape.Arrowhea
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.489 * scale + 2 * MathJax.xypic.measure.thickness, d:0.147 * scale, u:0.147 * scale };
+		return { l: 0, r: 0.489 * scale + 2 * MathJax.xypic.measure.thickness, d: 0.147 * scale, u: 0.147 * scale };
 	}
 
 	drawDelegate(svg) {
@@ -1899,16 +1899,16 @@ Shape.LTLTArrowheadShape = class Shape_LTLTArrowheadShape extends Shape.Arrowhea
 		var t = MathJax.xypic.measure.thickness;
 		var hshift = MathJax.xypic.measure.em2px(2 * t);
 		svg.createSVGElement("path", {
-			d:"M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -1925,7 +1925,7 @@ Shape.UpperLTLTArrowheadShape = class Shape_UpperLTLTArrowheadShape extends Shap
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.489 * scale + 2 * MathJax.xypic.measure.thickness, d:0, u:0.147 * scale };
+		return { l: 0, r: 0.489 * scale + 2 * MathJax.xypic.measure.thickness, d: 0, u: 0.147 * scale };
 	}
 
 	drawDelegate(svg) {
@@ -1933,10 +1933,10 @@ Shape.UpperLTLTArrowheadShape = class Shape_UpperLTLTArrowheadShape extends Shap
 		var t = MathJax.xypic.measure.thickness;
 		var hshift = MathJax.xypic.measure.em2px(2 * t);
 		svg.createSVGElement("path", {
-			d:"M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 	}
 };
@@ -1953,7 +1953,7 @@ Shape.LowerLTLTArrowheadShape = class Shape_LowerLTLTArrowheadShape extends Shap
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.489 * scale + 2 * MathJax.xypic.measure.thickness, d:0.147 * scale, u:0 };
+		return { l: 0, r: 0.489 * scale + 2 * MathJax.xypic.measure.thickness, d: 0.147 * scale, u: 0 };
 	}
 
 	drawDelegate(svg) {
@@ -1961,10 +1961,10 @@ Shape.LowerLTLTArrowheadShape = class Shape_LowerLTLTArrowheadShape extends Shap
 		var t = MathJax.xypic.measure.thickness;
 		var hshift = MathJax.xypic.measure.em2px(2 * t);
 		svg.createSVGElement("path", {
-			d:"M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -1981,7 +1981,7 @@ Shape.LTLT2ArrowheadShape = class Shape_LTLT2ArrowheadShape extends Shape.Arrowh
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.456 + scale + 2 * MathJax.xypic.measure.thickness, d:0.229 * scale, u:0.229 * scale };
+		return { l: 0, r: 0.456 + scale + 2 * MathJax.xypic.measure.thickness, d: 0.229 * scale, u: 0.229 * scale };
 	}
 
 	getRadius() {
@@ -1992,21 +1992,21 @@ Shape.LTLT2ArrowheadShape = class Shape_LTLT2ArrowheadShape extends Shape.Arrowh
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		var t = MathJax.xypic.measure.thickness;
-		var gu1 = svg.createGroup(svg.transformBuilder().translate(2 * t, 0).rotateDegree(10)); 
+		var gu1 = svg.createGroup(svg.transformBuilder().translate(2 * t, 0).rotateDegree(10));
 		var gd1 = svg.createGroup(svg.transformBuilder().translate(2 * t, 0).rotateDegree(-10));
 		gu1.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd1.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
-		var gu2 = svg.createGroup(svg.transformBuilder().rotateDegree(10)); 
+		var gu2 = svg.createGroup(svg.transformBuilder().rotateDegree(10));
 		var gd2 = svg.createGroup(svg.transformBuilder().rotateDegree(-10));
 		gu2.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd2.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -2023,7 +2023,7 @@ Shape.LTLT3ArrowheadShape = class Shape_LTLT3ArrowheadShape extends Shape.Arrowh
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.507 * scale + 2 * MathJax.xypic.measure.thickness, d:0.268 * scale, u:0.268 * scale };
+		return { l: 0, r: 0.507 * scale + 2 * MathJax.xypic.measure.thickness, d: 0.268 * scale, u: 0.268 * scale };
 	}
 
 	getRadius() {
@@ -2034,24 +2034,24 @@ Shape.LTLT3ArrowheadShape = class Shape_LTLT3ArrowheadShape extends Shape.Arrowh
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		var t = MathJax.xypic.measure.thickness;
-		var gu1 = svg.createGroup(svg.transformBuilder().translate(2 * t, 0).rotateDegree(15)); 
+		var gu1 = svg.createGroup(svg.transformBuilder().translate(2 * t, 0).rotateDegree(15));
 		var gd1 = svg.createGroup(svg.transformBuilder().translate(2 * t, 0).rotateDegree(-15));
 		gu1.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd1.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
-		var gu2 = svg.createGroup(svg.transformBuilder().rotateDegree(15)); 
+		var gu2 = svg.createGroup(svg.transformBuilder().rotateDegree(15));
 		var gd2 = svg.createGroup(svg.transformBuilder().rotateDegree(-15));
 		gu2.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd2.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:MathJax.xypic.measure.em2px(0.507 * scale + 2 * t), y2:0
+			x1: 0, y1: 0, x2: MathJax.xypic.measure.em2px(0.507 * scale + 2 * t), y2: 0
 		});
 	}
 };
@@ -2067,17 +2067,17 @@ Shape.ColumnColumnArrowheadShape = class Shape_ColumnColumnArrowheadShape extend
 	}
 
 	getBox() {
-		return { l:MathJax.xypic.measure.thickness, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: MathJax.xypic.measure.thickness, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 		svg.createSVGElement("line", {
-			x1:-MathJax.xypic.measure.em2px(t), y1:l, x2:-MathJax.xypic.measure.em2px(t), y2:-l
+			x1: -MathJax.xypic.measure.em2px(t), y1: l, x2: -MathJax.xypic.measure.em2px(t), y2: -l
 		});
 	}
 };
@@ -2093,17 +2093,17 @@ Shape.UpperColumnColumnArrowheadShape = class Shape_UpperColumnColumnArrowheadSh
 	}
 
 	getBox() {
-		return { l:MathJax.xypic.measure.thickness, r:0, u:MathJax.xypic.measure.lineElementLength, d:0 };
+		return { l: MathJax.xypic.measure.thickness, r: 0, u: MathJax.xypic.measure.lineElementLength, d: 0 };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:0, y2:-l
+			x1: 0, y1: 0, x2: 0, y2: -l
 		});
 		svg.createSVGElement("line", {
-			x1:-MathJax.xypic.measure.em2px(t), y1:0, x2:-MathJax.xypic.measure.em2px(t), y2:-l
+			x1: -MathJax.xypic.measure.em2px(t), y1: 0, x2: -MathJax.xypic.measure.em2px(t), y2: -l
 		});
 	}
 };
@@ -2119,17 +2119,17 @@ Shape.LowerColumnColumnArrowheadShape = class Shape_LowerColumnColumnArrowheadSh
 	}
 
 	getBox() {
-		return { l:MathJax.xypic.measure.thickness, r:0, u:0, d:MathJax.xypic.measure.lineElementLength };
+		return { l: MathJax.xypic.measure.thickness, r: 0, u: 0, d: MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:0, y2:l
+			x1: 0, y1: 0, x2: 0, y2: l
 		});
 		svg.createSVGElement("line", {
-			x1:-MathJax.xypic.measure.em2px(t), y1:0, x2:-MathJax.xypic.measure.em2px(t), y2:l
+			x1: -MathJax.xypic.measure.em2px(t), y1: 0, x2: -MathJax.xypic.measure.em2px(t), y2: l
 		});
 	}
 };
@@ -2145,17 +2145,17 @@ Shape.ColumnColumn2ArrowheadShape = class Shape_ColumnColumn2ArrowheadShape exte
 	}
 
 	getBox() {
-		return { l:MathJax.xypic.measure.thickness, r:0, u:0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness), d:0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness) };
+		return { l: MathJax.xypic.measure.thickness, r: 0, u: 0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness), d: 0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness) };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness));
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 		svg.createSVGElement("line", {
-			x1:-MathJax.xypic.measure.em2px(t), y1:l, x2:-MathJax.xypic.measure.em2px(t), y2:-l
+			x1: -MathJax.xypic.measure.em2px(t), y1: l, x2: -MathJax.xypic.measure.em2px(t), y2: -l
 		});
 	}
 };
@@ -2171,7 +2171,7 @@ Shape.ColumnColumn3ArrowheadShape = class Shape_ColumnColumn3ArrowheadShape exte
 	}
 
 	getBox() {
-		return { l:MathJax.xypic.measure.thickness, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness, d:0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness };
+		return { l: MathJax.xypic.measure.thickness, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness, d: 0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
@@ -2179,10 +2179,10 @@ Shape.ColumnColumn3ArrowheadShape = class Shape_ColumnColumn3ArrowheadShape exte
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 		svg.createSVGElement("line", {
-			x1:-MathJax.xypic.measure.em2px(t), y1:l, x2:-MathJax.xypic.measure.em2px(t), y2:-l
+			x1: -MathJax.xypic.measure.em2px(t), y1: l, x2: -MathJax.xypic.measure.em2px(t), y2: -l
 		});
 	}
 };
@@ -2198,17 +2198,17 @@ Shape.ColumnLineArrowheadShape = class Shape_ColumnLineArrowheadShape extends Sh
 	}
 
 	getBox() {
-		return { l:0, r:MathJax.xypic.measure.lineElementLength, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: MathJax.xypic.measure.lineElementLength, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:lineLen, y2:0
+			x1: 0, y1: 0, x2: lineLen, y2: 0
 		});
 	}
 };
@@ -2224,18 +2224,18 @@ Shape.UpperColumnLineArrowheadShape = class Shape_UpperColumnLineArrowheadShape 
 	}
 
 	getBox() {
-		return { l:0, r:MathJax.xypic.measure.lineElementLength, u:MathJax.xypic.measure.lineElementLength, d:0 };
+		return { l: 0, r: MathJax.xypic.measure.lineElementLength, u: MathJax.xypic.measure.lineElementLength, d: 0 };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:0, y2:-l
+			x1: 0, y1: 0, x2: 0, y2: -l
 		});
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:lineLen, y2:0
+			x1: 0, y1: 0, x2: lineLen, y2: 0
 		});
 	}
 };
@@ -2251,18 +2251,18 @@ Shape.LowerColumnLineArrowheadShape = class Shape_LowerColumnLineArrowheadShape 
 	}
 
 	getBox() {
-		return { l:0, r:MathJax.xypic.measure.lineElementLength, u:0, d:MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: MathJax.xypic.measure.lineElementLength, u: 0, d: MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:0, y2:l
+			x1: 0, y1: 0, x2: 0, y2: l
 		});
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:lineLen, y2:0
+			x1: 0, y1: 0, x2: lineLen, y2: 0
 		});
 	}
 };
@@ -2278,22 +2278,22 @@ Shape.ColumnLine2ArrowheadShape = class Shape_ColumnLine2ArrowheadShape extends 
 	}
 
 	getBox() {
-		return { l:0, r:MathJax.xypic.measure.lineElementLength, u:0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness), d:0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness) };
+		return { l: 0, r: MathJax.xypic.measure.lineElementLength, u: 0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness), d: 0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness) };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * (MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness));
 		svg.createSVGElement("line", {
-			x1:0, y1:-l, x2:0, y2:l
+			x1: 0, y1: -l, x2: 0, y2: l
 		});
 		var vshift = MathJax.xypic.measure.em2px(0.5 * t);
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:vshift, x2:lineLen, y2:vshift
+			x1: 0, y1: vshift, x2: lineLen, y2: vshift
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:-vshift, x2:lineLen, y2:-vshift
+			x1: 0, y1: -vshift, x2: lineLen, y2: -vshift
 		});
 	}
 };
@@ -2309,25 +2309,25 @@ Shape.ColumnLine3ArrowheadShape = class Shape_ColumnLine3ArrowheadShape extends 
 	}
 
 	getBox() {
-		return { l:0, r:MathJax.xypic.measure.lineElementLength, u:0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness, d:0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness };
+		return { l: 0, r: MathJax.xypic.measure.lineElementLength, u: 0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness, d: 0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength + MathJax.xypic.measure.thickness);
 		svg.createSVGElement("line", {
-			x1:0, y1:-l, x2:0, y2:l
+			x1: 0, y1: -l, x2: 0, y2: l
 		});
 		var lineLen = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		var vshift = MathJax.xypic.measure.em2px(t);
 		svg.createSVGElement("line", {
-			x1:0, y1:vshift, x2:lineLen, y2:vshift
+			x1: 0, y1: vshift, x2: lineLen, y2: vshift
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:0, x2:lineLen, y2:0
+			x1: 0, y1: 0, x2: lineLen, y2: 0
 		});
 		svg.createSVGElement("line", {
-			x1:0, y1:-vshift, x2:lineLen, y2:-vshift
+			x1: 0, y1: -vshift, x2: lineLen, y2: -vshift
 		});
 	}
 };
@@ -2344,20 +2344,20 @@ Shape.GTColumnArrowheadShape = class Shape_GTColumnArrowheadShape extends Shape.
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.489 * scale, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0.489 * scale, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var scale = MathJax.xypic.measure.oneem;
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 	}
 };
@@ -2374,7 +2374,7 @@ Shape.GTGTColumnArrowheadShape = class Shape_GTGTColumnArrowheadShape extends Sh
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0.489 * scale + 2 * MathJax.xypic.measure.thickness, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0.489 * scale + 2 * MathJax.xypic.measure.thickness, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
@@ -2382,20 +2382,20 @@ Shape.GTGTColumnArrowheadShape = class Shape_GTGTColumnArrowheadShape extends Sh
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 		var hshift = MathJax.xypic.measure.em2px(2 * t);
 		svg.createSVGElement("path", {
-			d:"M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M" + (-hshift) + ",0 Q" + (MathJax.xypic.measure.em2px(-0.222 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(-0.489 * scale) - hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 	}
 };
@@ -2412,7 +2412,7 @@ Shape.ColumnLTArrowheadShape = class Shape_ColumnLTArrowheadShape extends Shape.
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.489 * scale, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: 0.489 * scale, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
@@ -2420,13 +2420,13 @@ Shape.ColumnLTArrowheadShape = class Shape_ColumnLTArrowheadShape extends Shape.
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -2443,7 +2443,7 @@ Shape.ColumnLTLTArrowheadShape = class Shape_ColumnLTLTArrowheadShape extends Sh
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:0, r:0.489 * scale + 2 * MathJax.xypic.measure.thickness, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: 0, r: 0.489 * scale + 2 * MathJax.xypic.measure.thickness, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
@@ -2451,20 +2451,20 @@ Shape.ColumnLTLTArrowheadShape = class Shape_ColumnLTLTArrowheadShape extends Sh
 		var t = MathJax.xypic.measure.thickness;
 		var l = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:l, x2:0, y2:-l
+			x1: 0, y1: l, x2: 0, y2: -l
 		});
 		var hshift = MathJax.xypic.measure.em2px(2 * t);
 		svg.createSVGElement("path", {
-			d:"M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M" + hshift + ",0 Q" + (MathJax.xypic.measure.em2px(0.222 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + (MathJax.xypic.measure.em2px(0.489 * scale) + hshift) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 	}
 };
@@ -2480,17 +2480,17 @@ Shape.SlashSlashArrowheadShape = class Shape_SlashSlashArrowheadShape extends Sh
 	}
 
 	getBox() {
-		return { l:MathJax.xypic.measure.thickness, r:0, u:0.5 * MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.lineElementLength };
+		return { l: MathJax.xypic.measure.thickness, r: 0, u: 0.5 * MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.lineElementLength };
 	}
 
 	drawDelegate(svg) {
 		var hshift = MathJax.xypic.measure.em2px(MathJax.xypic.measure.thickness);
 		var halfLenPx = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.lineElementLength);
 		svg.createSVGElement("line", {
-			x1:0, y1:halfLenPx, x2:0, y2:-halfLenPx
+			x1: 0, y1: halfLenPx, x2: 0, y2: -halfLenPx
 		});
 		svg.createSVGElement("line", {
-			x1:-hshift, y1:halfLenPx, x2:-hshift, y2:-halfLenPx
+			x1: -hshift, y1: halfLenPx, x2: -hshift, y2: -halfLenPx
 		});
 	}
 };
@@ -2507,7 +2507,7 @@ Shape.LineGT2ArrowheadShape = class Shape_LineGT2ArrowheadShape extends Shape.Ar
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:MathJax.xypic.measure.lineElementLength, r:MathJax.xypic.measure.lineElementLength, d:0.229 * scale, u:0.229 * scale };
+		return { l: MathJax.xypic.measure.lineElementLength, r: MathJax.xypic.measure.lineElementLength, d: 0.229 * scale, u: 0.229 * scale };
 	}
 
 	getRadius() {
@@ -2523,17 +2523,17 @@ Shape.LineGT2ArrowheadShape = class Shape_LineGT2ArrowheadShape extends Shape.Ar
 		var vshift = MathJax.xypic.measure.em2px(v);
 		var r = this.getRadius();
 		var delta = MathJax.xypic.measure.em2px(Math.sqrt(r * r - v * v));
-		
+
 		var gu = svg.createGroup(svg.transformBuilder().translate(halfLen, 0).rotateDegree(-10));
 		var gd = svg.createGroup(svg.transformBuilder().translate(halfLen, 0).rotateDegree(10));
 		gu.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(-0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(-0.147 * scale)
 		});
 		gd.createSVGElement("path", {
-			d:"M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + ","+MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
+			d: "M0,0 Q" + MathJax.xypic.measure.em2px(-0.222 * scale) + "," + MathJax.xypic.measure.em2px(0.020 * scale) + " " + MathJax.xypic.measure.em2px(-0.489 * scale) + "," + MathJax.xypic.measure.em2px(0.147 * scale)
 		});
 		svg.createSVGElement("path", {
-			d:"M" + (-hshift) + "," + vshift + " L" + (hshift - delta) + "," + vshift + 
+			d: "M" + (-hshift) + "," + vshift + " L" + (hshift - delta) + "," + vshift +
 				" M" + (-hshift) + "," + (-vshift) + " L" + (hshift - delta) + "," + (-vshift)
 		});
 	}
@@ -2551,7 +2551,7 @@ Shape.TwocellEqualityArrowheadShape = class Shape_TwocellEqualityArrowheadShape 
 
 	getBox() {
 		var scale = MathJax.xypic.measure.oneem;
-		return { l:MathJax.xypic.measure.lineElementLength, r:MathJax.xypic.measure.lineElementLength, d:0.5 * MathJax.xypic.measure.thickness, u:0.5 * MathJax.xypic.measure.thickness };
+		return { l: MathJax.xypic.measure.lineElementLength, r: MathJax.xypic.measure.lineElementLength, d: 0.5 * MathJax.xypic.measure.thickness, u: 0.5 * MathJax.xypic.measure.thickness };
 	}
 
 	drawDelegate(svg) {
@@ -2559,7 +2559,7 @@ Shape.TwocellEqualityArrowheadShape = class Shape_TwocellEqualityArrowheadShape 
 		var hshift = MathJax.xypic.measure.em2px(MathJax.xypic.measure.lineElementLength);
 		var vshift = MathJax.xypic.measure.em2px(0.5 * MathJax.xypic.measure.thickness);
 		svg.createSVGElement("path", {
-			d:"M" + (-hshift) + "," + vshift + " L" + hshift + "," + vshift + 
+			d: "M" + (-hshift) + "," + vshift + " L" + hshift + "," + vshift +
 				" M" + (-hshift) + "," + (-vshift) + " L" + hshift + "," + (-vshift)
 		});
 	}
@@ -2618,6 +2618,6 @@ Shape.CurveShape = class Shape_CurveShape extends Shape {
 	}
 
 	toString() {
-		return "CurveShape[curve" + this.curve + ", objectForDrop:" + (this.objectForDrop !== undefined? this.objectForDrop.toString() : "null") + ", objectForConnect:" + (this.objectForConnect !== undefined? this.objectForConnect.toString() : "null") + "]";
+		return "CurveShape[curve" + this.curve + ", objectForDrop:" + (this.objectForDrop !== undefined ? this.objectForDrop.toString() : "null") + ", objectForConnect:" + (this.objectForConnect !== undefined ? this.objectForConnect.toString() : "null") + "]";
 	}
 };

@@ -16,19 +16,19 @@
  */
 
 
-import {MathJax} from "../../mathjax/js/components/global.js";
-import {CHTMLWrapper} from "../../mathjax/js/output/chtml/Wrapper.js";
-import TexError from "../../mathjax/js/input/tex/TexError.js";
-import {BBox} from '../../mathjax/js/util/BBox.js';
+import { MathJax } from "mathjax-full/js/components/global.js";
+import { CHTMLWrapper } from "mathjax-full/js/output/chtml/Wrapper.js";
+import TexError from "mathjax-full/js/input/tex/TexError.js";
+import { BBox } from 'mathjax-full/js/util/BBox.js';
 
-import {AST} from "../input/XyNodes.js";
-import {Shape} from "./Shapes.js";
-import {Frame} from "./Frames.js";
-import {Graphics} from "./Graphics.js";
-import {DrawingContext} from "./DrawingContext.js";
-import {Env} from "./Curves.js";
-import {augment} from "./AugmentXyNodes.js";
-import {XypicUtil} from "../util/XypicUtil.js";
+import { AST } from "../input/XyNodes.js";
+import { Shape } from "./Shapes.js";
+import { Frame } from "./Frames.js";
+import { Graphics } from "./Graphics.js";
+import { DrawingContext } from "./DrawingContext.js";
+import { Env } from "./Curves.js";
+import { augment } from "./AugmentXyNodes.js";
+import { XypicUtil } from "../util/XypicUtil.js";
 
 
 const SVGNS = 'http://www.w3.org/2000/svg';
@@ -53,7 +53,7 @@ augment(Shape.TextShape, {
 		const halfW = W / 2;
 
 		const c = this.c;
-		this.originalBBox = { H:H, D:D, W:W };
+		this.originalBBox = { H: H, D: D, W: W };
 
 		if (!test) {
 			const thisRoot = thisWrapper.html("mjx-xypic-object");
@@ -88,13 +88,13 @@ augment(Shape.TextShape, {
 			// });
 		}
 
-		return c.toRect({ u:halfHD, d:halfHD, l:halfW, r:halfW });
+		return c.toRect({ u: halfHD, d: halfHD, l: halfW, r: halfW });
 	}
 });
 
 
 class AbstractCHTMLxypic extends CHTMLWrapper {
-	constructor(factory, node, parent=null) {
+	constructor(factory, node, parent = null) {
 		super(factory, node, parent);
 
 		const wrapperOfTextObjectMap = MathJax.xypic.wrapperOfTextObjectMap;
@@ -162,7 +162,7 @@ class AbstractCHTMLxypic extends CHTMLWrapper {
 			em: em,
 			em2px: em2px,
 			axis_height: axis_height,
-			
+
 			strokeWidth: wrapper.length2em("0.04em"),
 			thickness: thickness,
 			jot: wrapper.length2em("3pt"),
@@ -173,7 +173,7 @@ class AbstractCHTMLxypic extends CHTMLWrapper {
 			turnradius: wrapper.length2em("10pt"),
 			lineElementLength: wrapper.length2em("5pt"),
 			axisHeightLength: axis_height * wrapper.length2em("10pt"),
-			
+
 			dottedDasharray: "" + oneem + " " + em2px(thickness)
 		}
 	}
@@ -186,7 +186,7 @@ class AbstractCHTMLxypic extends CHTMLWrapper {
 		this.adaptor.remove(child);
 	}
 
-	svg(kind, properties={}, children=[]) {
+	svg(kind, properties = {}, children = []) {
 		return this.adaptor.node(kind, properties, children, SVGNS);
 	}
 
@@ -202,7 +202,7 @@ class AbstractCHTMLxypic extends CHTMLWrapper {
 
 
 export class CHTMLxypic extends AbstractCHTMLxypic {
-	constructor(factory, node, parent=null) {
+	constructor(factory, node, parent = null) {
 		super(factory, node, parent);
 	}
 
@@ -220,7 +220,7 @@ export class CHTMLxypic extends AbstractCHTMLxypic {
 		const p = this.length2em("0.2em");
 		const t = MathJax.xypic.measure.strokeWidth;
 
-		const bbox = { h:1, d:0, w:1, lw:0, rw:1 };
+		const bbox = { h: 1, d: 0, w: 1, lw: 0, rw: 1 };
 		const H = bbox.h, D = bbox.d, W = bbox.w;
 
 		const em2px = MathJax.xypic.measure.em2px;
@@ -228,7 +228,7 @@ export class CHTMLxypic extends AbstractCHTMLxypic {
 		const color = "black";
 		const svg = Graphics.createSVG(this, H, D, W, t, color, {
 			viewBox: [0, -em2px(H + D), em2px(W), em2px(H + D)].join(" "),
-			role: "img", 
+			role: "img",
 			focusable: false,
 			overflow: "visible"
 		});
@@ -241,13 +241,13 @@ export class CHTMLxypic extends AbstractCHTMLxypic {
 		const xypicData = this.node.cmd;
 		if (xypicData) {
 			const env = new Env();
-			
+
 			const context = new DrawingContext(Shape.none, env);
 			xypicData.toShape(context);
 			const shape = context.shape;
 
 			shape.draw(svg);
-			
+
 			let box = shape.getBoundingBox();
 			if (box !== undefined) {
 				box = new Frame.Rect(
@@ -265,13 +265,13 @@ export class CHTMLxypic extends AbstractCHTMLxypic {
 
 				const svgWidth = box.l + box.r + 2 * p;
 				const svgHeight = box.u + box.d + 2 * p;
-				
+
 				svg.setWidth(svgWidth);
 				svg.setHeight(svgHeight);
 				svg.setAttribute("viewBox", [
-						em2px(xOffsetEm), em2px(yOffsetEm), 
-						em2px(svgWidth), em2px(svgHeight)
-					].join(" "));
+					em2px(xOffsetEm), em2px(yOffsetEm),
+					em2px(svgWidth), em2px(svgHeight)
+				].join(" "));
 				adaptor.setStyle(chtml, "vertical-align", round2(- box.d - p + MathJax.xypic.measure.axis_height) + "em");
 
 				for (let to of this._textObjects) {
@@ -295,7 +295,7 @@ CHTMLxypic.kind = AST.xypic.prototype.kind;
 
 
 export class CHTMLnewdir extends AbstractCHTMLxypic {
-	constructor(factory, node, parent=null) {
+	constructor(factory, node, parent = null) {
 		super(factory, node, parent);
 	}
 
@@ -309,7 +309,7 @@ CHTMLnewdir.kind = AST.xypic.newdir.prototype.kind;
 
 
 export class CHTMLincludegraphics extends AbstractCHTMLxypic {
-	constructor(factory, node, parent=null) {
+	constructor(factory, node, parent = null) {
 		super(factory, node, parent);
 		this._setupGraphics();
 		this.computeBBox(this.bbox);
@@ -329,13 +329,13 @@ export class CHTMLincludegraphics extends AbstractCHTMLxypic {
 
 		const imageWidth = env.includegraphicsWidth.get;
 		const imageHeight = env.includegraphicsHeight.get;
-		
+
 		this.imageWidth = this.length2em(imageWidth);
 		this.imageHeight = this.length2em(imageHeight);
 		this.filepath = graphics.filepath;
 	}
 
-	computeBBox(bbox, recompute=false) {
+	computeBBox(bbox, recompute = false) {
 		bbox.empty();
 		bbox.updateFrom(new BBox({ w: this.imageWidth, h: this.imageHeight, d: 0 }));
 	}

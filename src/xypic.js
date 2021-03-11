@@ -19,21 +19,21 @@
 // for DEBUGGING
 // import {} from "./util/EnableSourceMap.js";
 
-import {MathJax, combineWithMathJax, combineConfig} from "../mathjax/js/components/global.js";
-import {STATE} from "../mathjax/js/core/MathItem.js";
-import {Configuration} from "../mathjax/js/input/tex/Configuration.js";
-import {CommandMap, EnvironmentMap} from "../mathjax/js/input/tex/SymbolMap.js";
-import BaseMethods from "../mathjax/js/input/tex/base/BaseMethods.js";
-import ParseMethods from "../mathjax/js/input/tex/ParseMethods.js";
-import TexParser from "../mathjax/js/input/tex/TexParser.js";
-import TexError from "../mathjax/js/input/tex/TexError.js";
+import { MathJax, combineWithMathJax, combineConfig } from "mathjax-full/js/components/global.js";
+import { STATE } from "mathjax-full/js/core/MathItem.js";
+import { Configuration } from "mathjax-full/js/input/tex/Configuration.js";
+import { CommandMap, EnvironmentMap } from "mathjax-full/js/input/tex/SymbolMap.js";
+import BaseMethods from "mathjax-full/js/input/tex/base/BaseMethods.js";
+import ParseMethods from "mathjax-full/js/input/tex/ParseMethods.js";
+import TexParser from "mathjax-full/js/input/tex/TexParser.js";
+import TexError from "mathjax-full/js/input/tex/TexError.js";
 
-import {XypicConstants} from "./util/XypicConstants.js"
-import {Parsers, StringReader} from "./fp/Parsers.js";
-import {AST} from "./input/XyNodes.js"
-import {XyParser} from "./input/XyParser.js"
-import {CHTMLxypic, CHTMLnewdir, CHTMLincludegraphics} from "./output/CHTMLWrappers.js";
-import {ModifierRepository, DirRepository} from "./output/Repositories.js";
+import { XypicConstants } from "./util/XypicConstants.js"
+import { Parsers, StringReader } from "./fp/Parsers.js";
+import { AST } from "./input/XyNodes.js"
+import { XyParser } from "./input/XyParser.js"
+import { CHTMLxypic, CHTMLnewdir, CHTMLincludegraphics } from "./output/CHTMLWrappers.js";
+import { ModifierRepository, DirRepository } from "./output/Repositories.js";
 
 
 function parseXypic(texParser, xyParser, mmlKind) {
@@ -91,7 +91,7 @@ XypicMethods.xyincludegraphics = function (parser, name, type) {
 	parser.Push(mml);
 };
 
-XypicMethods.xyEnvironment = function(parser, begin) {
+XypicMethods.xyEnvironment = function (parser, begin) {
 	const mml = parseXypic(parser, XyParser.xy(), CHTMLxypic.kind);
 	parser.Push(begin);
 	return mml;
@@ -131,37 +131,37 @@ function registerNodeClassOnlyOnce(kind, mmlClass, wrapperClass, mmlFactory) {
 
 const XypicConfiguration = Configuration.create(
 	"xypic", {
-		handler: {
-			macro: ["xypic-command"],
-			environment: ["xypic-environment"]
+	handler: {
+		macro: ["xypic-command"],
+		environment: ["xypic-environment"]
+	},
+	nodes: {
+		"xypic": function (nodeFactory, command, textMmls) {
+			const mmlFactory = nodeFactory.mmlFactory;
+
+			// TODO register this in the right place
+			registerNodeClassOnlyOnce(CHTMLxypic.kind, AST.xypic, CHTMLxypic, mmlFactory);
+
+			return new AST.xypic(mmlFactory, command, textMmls);
 		},
-		nodes: {
-			"xypic": function(nodeFactory, command, textMmls) {
-				const mmlFactory = nodeFactory.mmlFactory;
+		"xypic-newdir": function (nodeFactory, command, textMmls) {
+			const mmlFactory = nodeFactory.mmlFactory;
 
-				// TODO register this in the right place
-				registerNodeClassOnlyOnce(CHTMLxypic.kind, AST.xypic, CHTMLxypic, mmlFactory);
+			// TODO register this in the right place
+			registerNodeClassOnlyOnce(CHTMLnewdir.kind, AST.xypic.newdir, CHTMLnewdir, mmlFactory);
 
-				return new AST.xypic(mmlFactory, command, textMmls);
-			},
-			"xypic-newdir": function(nodeFactory, command, textMmls) {
-				const mmlFactory = nodeFactory.mmlFactory;
+			return new AST.xypic.newdir(mmlFactory, command, textMmls);
+		},
+		"xypic-includegraphics": function (nodeFactory, command, textMmls) {
+			const mmlFactory = nodeFactory.mmlFactory;
 
-				// TODO register this in the right place
-				registerNodeClassOnlyOnce(CHTMLnewdir.kind, AST.xypic.newdir, CHTMLnewdir, mmlFactory);
+			// TODO register this in the right place
+			registerNodeClassOnlyOnce(CHTMLincludegraphics.kind, AST.xypic.includegraphics, CHTMLincludegraphics, mmlFactory);
 
-				return new AST.xypic.newdir(mmlFactory, command, textMmls);
-			},
-			"xypic-includegraphics": function(nodeFactory, command, textMmls) {
-				const mmlFactory = nodeFactory.mmlFactory;
-
-				// TODO register this in the right place
-				registerNodeClassOnlyOnce(CHTMLincludegraphics.kind, AST.xypic.includegraphics, CHTMLincludegraphics, mmlFactory);
-
-				return new AST.xypic.includegraphics(mmlFactory, command, textMmls);
-			}
+			return new AST.xypic.includegraphics(mmlFactory, command, textMmls);
 		}
 	}
+}
 );
 
 

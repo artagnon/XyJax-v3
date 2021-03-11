@@ -16,19 +16,17 @@
  */
 
 
-import {MathJax} from "../../mathjax/js/components/global.js";
-import TexError from "../../mathjax/js/input/tex/TexError.js";
-
-import {XypicConstants} from "../util/XypicConstants.js";
-import {XypicUtil} from "../util/XypicUtil.js";
-import {List} from "../fp/List.js";
-import {Option} from "../fp/Option.js";
-import {AST} from "../input/XyNodes.js";
-import {Shape} from "./Shapes.js";
-import {Frame} from "./Frames.js";
-import {Env, LastCurve, Curve, CurveSegment} from "./Curves.js";
-import {DrawingContext} from "./DrawingContext.js";
-import {Saving} from "./Saving.js";
+import { MathJax } from "mathjax-full/js/components/global.js";
+import { XypicConstants } from "../util/XypicConstants.js";
+import { XypicUtil } from "../util/XypicUtil.js";
+import { List } from "../fp/List.js";
+import { Option } from "../fp/Option.js";
+import { AST } from "../input/XyNodes.js";
+import { Shape } from "./Shapes.js";
+import { Frame } from "./Frames.js";
+import { Env, LastCurve, Curve, CurveSegment } from "./Curves.js";
+import { DrawingContext } from "./DrawingContext.js";
+import { Saving } from "./Saving.js";
 
 
 // add methods to given class.
@@ -146,9 +144,9 @@ augment(AST.Pos.Place, {
 			var start, end, f, dimen;
 			var shouldShaveP = (place.shaveP > 0);
 			var shouldShaveC = (place.shaveC > 0);
-			var jotP = (shouldShaveP? place.shaveP - 1 : 0);
-			var jotC = (shouldShaveC? place.shaveC - 1 : 0);
-			
+			var jotP = (shouldShaveP ? place.shaveP - 1 : 0);
+			var jotC = (shouldShaveC ? place.shaveC - 1 : 0);
+
 			if (shouldShaveP) { f = 0; }
 			if (shouldShaveC) { f = 1; }
 			if (shouldShaveP == shouldShaveC) {
@@ -165,7 +163,7 @@ augment(AST.Pos.Place, {
 					f = place.factor.value(context);
 				}
 			}
-			
+
 			dimen = MathJax.xypic.measure.length2em(place.slide.dimen.getOrElse("0"));
 			var jot = MathJax.xypic.measure.jot;
 			var slideEm = dimen + (jotP - jotC) * jot;
@@ -249,49 +247,49 @@ augment(AST.Place.Intercept, {
 		if (!env.lastCurve.isDefined) {
 			return undefined;
 		}
-		
+
 		var tmpEnv = env.duplicate();
 		tmpEnv.angle = 0;
 		tmpEnv.lastCurve = LastCurve.none;
 		tmpEnv.p = tmpEnv.c = Env.originPosition;
 		var tmpContext = new DrawingContext(Shape.none, tmpEnv);
-		
+
 		var box = this.pos.toShape(tmpContext);
 		context.appendShapeToFront(tmpContext.shape);
-		
+
 		if (!tmpEnv.lastCurve.isDefined) {
 			tmpEnv.lastCurve = new LastCurve.Line(tmpEnv.p, tmpEnv.c, tmpEnv.p, tmpEnv.c, undefined);
 		}
-		
+
 		var intersec = [];
 		var thisSegs = env.lastCurve.segments();
 		var thatSegs = tmpEnv.lastCurve.segments();
-		
+
 		for (var i = 0; i < thisSegs.length; i++) {
 			for (var j = 0; j < thatSegs.length; j++) {
 				intersec = intersec.concat(CurveSegment.findIntersections(thisSegs[i], thatSegs[j]));
 			}
 		}
-		
+
 		if (intersec.length === 0) {
 			// find the nearest point, if no intersection was found.
 			console.log("perhaps no curve intersection.");
-			
+
 			// Levenberg-Marqardt Method
 			var line0 = env.lastCurve;
 			var line1 = tmpEnv.lastCurve;
-			
+
 			var n = 100; // maxIterations
 			var goalAccuracy = 1e-5;
 			var tau = 1e-3;
-			
+
 			var k = 0;
 			var nu = 2;
-			
+
 			// TODO: 複数個の開始地点から探索し、尤もらしい解を選択する。
 			var x0 = 0;
 			var x1 = 0;
-			
+
 			var tx = function (x) {
 				return 1 / (1 + Math.exp(-x));
 			}
@@ -299,60 +297,60 @@ augment(AST.Place.Intercept, {
 				var ex = Math.exp(-x);
 				return ex / (1 + ex) / (1 + ex);
 			}
-			
+
 			var t0 = tx(x0);
 			var t1 = tx(x1);
 			var dt0 = dtx(x0);
 			var dt1 = dtx(x1);
-			
+
 			var dp0 = line0.derivative(t0);
 			var dp1 = line1.derivative(t1);
-			
+
 			var j00 = dp0.x * dt0, j01 = -dp1.x * dt1;
 			var j10 = dp0.y * dt0, j11 = -dp1.y * dt1;
-			
+
 			var a00 = j00 * j00 + j10 * j10, a01 = j00 * j01 + j10 * j11;
 			var a10 = j01 * j00 + j11 * j10, a11 = j01 * j01 + j11 * j11;
-			
+
 			var p0 = line0.position(t0);
 			var p1 = line1.position(t1);
-			
+
 			var f0 = p0.x - p1.x;
 			var f1 = p0.y - p1.y;
-			
+
 			var g0 = j00 * f0 + j10 * f1;
 			var g1 = j01 * f0 + j11 * f1;
-			
+
 			var stop = Math.sqrt(g0 * g0 + g1 * g1) < goalAccuracy;
 			var mu = tau * Math.max(a00, a11);
-			
+
 			while (!stop && k < n) {
 				k++;
 				do {
 					var am00 = a00 + mu, am01 = a01;
 					var am10 = a10, am11 = a11 + mu;
-					
+
 					var det = am00 * am11 - am01 * am10;
 					var d0 = (am11 * g0 - a01 * g1) / det;
 					var d1 = (-am10 * g0 + a00 * g1) / det;
-					
+
 					if ((d0 * d0 + d1 * d1) < goalAccuracy * goalAccuracy * (x0 * x0 + x1 * x1)) {
 						stop = true;
 					} else {
 						var newX0 = x0 - d0;
 						var newX1 = x1 - d1;
-						
+
 						var newT0 = tx(newX0);
 						var newT1 = tx(newX1);
-						
+
 						var newP0 = line0.position(newT0);
 						var newP1 = line1.position(newT1);
-						
+
 						var newF0 = newP0.x - newP1.x;
 						var newF1 = newP0.y - newP1.y;
-						
+
 						var rho = ((f0 * f0 + f1 * f1) - (newF0 * newF0 + newF1 * newF1)) / (d0 * (mu * d0 + g0) + d1 * (mu * d1 + g1));
-						
+
 						if (rho > 0) {
 							x0 = newX0;
 							x1 = newX1;
@@ -362,10 +360,10 @@ augment(AST.Place.Intercept, {
 							dt1 = dtx(x1);
 							dp0 = line0.derivative(t0);
 							dp1 = line1.derivative(t1);
-							j00 = dp0.x * dt0;  j01 = -dp1.x * dt1;
-							j10 = dp0.y * dt0;  j11 = -dp1.y * dt1;
-							a00 = j00 * j00 + j10 * j10;  a01 = j00 * j01 + j10 * j11;
-							a10 = j01 * j00 + j11 * j10;  a11 = j01 * j01 + j11 * j11;
+							j00 = dp0.x * dt0; j01 = -dp1.x * dt1;
+							j10 = dp0.y * dt0; j11 = -dp1.y * dt1;
+							a00 = j00 * j00 + j10 * j10; a01 = j00 * j01 + j10 * j11;
+							a10 = j01 * j00 + j11 * j10; a11 = j01 * j01 + j11 * j11;
 							f0 = newF0;
 							f1 = newF1;
 							g0 = j00 * f0 + j10 * f1;
@@ -381,12 +379,12 @@ augment(AST.Place.Intercept, {
 					}
 				} while (!stop && !(rho !== undefined && rho > 0))
 			}
-			
+
 			return tx(x0);
 		} else {
-			var t = (intersec[0][0].min + intersec[0][0].max)/2;
-			for (var i = 1; i < intersec.length; i++) { 
-				var ttmp = (intersec[i][0].min + intersec[i][0].max)/2;
+			var t = (intersec[0][0].min + intersec[0][0].max) / 2;
+			for (var i = 1; i < intersec.length; i++) {
+				var ttmp = (intersec[i][0].min + intersec[i][0].max) / 2;
 				if (t > ttmp) { t = ttmp; }
 			}
 			return t;
@@ -428,7 +426,7 @@ augment(AST.Object, {
 		if (env.c === undefined) {
 			return Shape.none;
 		}
-		
+
 		var modifiers = this.modifiers;
 		if (modifiers.isEmpty) {
 			return this.object.toDropShape(context);
@@ -461,7 +459,7 @@ augment(AST.Object, {
 		if (env.c === undefined) {
 			return Shape.none;
 		}
-		
+
 		var modifiers = this.modifiers;
 		if (modifiers.isEmpty) {
 			return this.object.toConnectShape(context);
@@ -591,7 +589,7 @@ augment(AST.ObjectBox.Xybox, {
 		var r = Math.max(0, bbox.r + bbox.x);
 		var u = Math.max(0, bbox.u + bbox.y);
 		var d = Math.max(0, bbox.d - bbox.y);
-		env.c = new Frame.Rect(c.x, c.y, { l:l, r:r, u:u, d:d });
+		env.c = new Frame.Rect(c.x, c.y, { l: l, r: r, u: u, d: d });
 		env.originalReferencePoint = c;
 		var objectShape = new Shape.TranslateShape(c.x, c.y, subshape);
 		context.appendShapeToFront(objectShape);
@@ -666,7 +664,7 @@ augment(AST.ObjectBox.Cir, {
 		var y = env.c.y;
 		var circleShape = this.cir.toDropShape(context, x, y, r);
 		env.c = new Frame.Ellipse(x, y, r, r, r, r);
-		
+
 		return circleShape;
 	},
 	toConnectShape: function (context) {
@@ -693,26 +691,26 @@ augment(AST.ObjectBox.Cir.Cir.Segment, {
 		var sa = this.startPointDegree(context);
 		var ea = this.endPointDegree(context, sa);
 		var da = ea - sa;
-		da = (da < 0? da + 360 : da);
+		da = (da < 0 ? da + 360 : da);
 		if (da === 0) {
 			return Shape.none;
 		}
-		
+
 		var large, flip;
 		if (this.orient === "^") {
-			large = (da > 180? "1" : "0");
+			large = (da > 180 ? "1" : "0");
 			flip = "0";
 		} else {
-			large = (da > 180? "0" : "1");
+			large = (da > 180 ? "0" : "1");
 			flip = "1";
 		}
-		
+
 		var degToRadCoef = Math.PI / 180;
 		var sx = x + r * Math.cos(sa * degToRadCoef);
 		var sy = y + r * Math.sin(sa * degToRadCoef);
 		var ex = x + r * Math.cos(ea * degToRadCoef);
 		var ey = y + r * Math.sin(ea * degToRadCoef);
-		
+
 		var circleSegmentShape = new Shape.CircleSegmentShape(x, y, sx, sy, r, large, flip, ex, ey);
 		context.appendShapeToFront(circleSegmentShape);
 		return circleSegmentShape;
@@ -810,7 +808,7 @@ augment(AST.ObjectBox.Frame, {
 		if (c === undefined) {
 			return Shape.none;
 		}
-		
+
 		var t = MathJax.xypic.measure.thickness;
 		var x = c.x;
 		var y = c.y;
@@ -830,7 +828,7 @@ augment(AST.ObjectBox.Frame, {
 					shape = new Shape.RectangleShape(x, y, left, right, up, down, radius, false, color, MathJax.xypic.measure.em2px(dash) + " " + MathJax.xypic.measure.em2px(dash));
 				}
 				break;
-				
+
 			case '==':
 				var dash = 3 * t;
 				if (convertToEllipse) {
@@ -841,24 +839,24 @@ augment(AST.ObjectBox.Frame, {
 					shape = new Shape.RectangleShape(x, y, left, right, up, down, radius, true, color, MathJax.xypic.measure.em2px(dash) + " " + MathJax.xypic.measure.em2px(dash));
 				}
 				break;
-				
+
 			case 'o-':
 				var dash = 3 * t;
 				var radius = MathJax.xypic.measure.lineElementLength;
 				shape = new Shape.RectangleShape(x, y, left, right, up, down, radius, false, color, MathJax.xypic.measure.em2px(dash) + " " + MathJax.xypic.measure.em2px(dash));
 				break;
-				
+
 			case 'oo':
 				var xy = this.radius.xy(context);
 				var r = xy.x;
 				shape = new Shape.EllipseShape(x + (right - left) / 2, y + (up - down) / 2, r, r, true, color, undefined);
 				break;
-				
+
 			case 'ee':
 				var xy = this.radius.xy(context);
 				shape = new Shape.EllipseShape(x + (right - left) / 2, y + (up - down) / 2, xy.x, xy.y, true, color, undefined);
 				break;
-				
+
 			case '-,':
 				var depth = this.radius.depth(context);
 				var radius = this.radius.radius(context);
@@ -867,31 +865,31 @@ augment(AST.ObjectBox.Frame, {
 					new Shape.BoxShadeShape(x, y, left, right, up, down, depth)
 				);
 				break;
-				
+
 			case '.o':
 				var xy = this.radius.xy(context);
 				var r = xy.x;
 				shape = new Shape.EllipseShape(x + (right - left) / 2, y + (up - down) / 2, r, r, false, color, MathJax.xypic.measure.dottedDasharray);
 				break;
-				
+
 			case '-o':
 				var dash = 3 * t;
 				var xy = this.radius.xy(context);
 				var r = xy.x;
 				shape = new Shape.EllipseShape(x + (right - left) / 2, y + (up - down) / 2, r, r, false, color, MathJax.xypic.measure.em2px(dash) + " " + MathJax.xypic.measure.em2px(dash));
 				break;
-				
+
 			case '.e':
 				var xy = this.radius.xy(context);
 				shape = new Shape.EllipseShape(x + (right - left) / 2, y + (up - down) / 2, xy.x, xy.y, false, color, MathJax.xypic.measure.dottedDasharray);
 				break;
-				
+
 			case '-e':
 				var dash = 3 * t;
 				var xy = this.radius.xy(context);
 				shape = new Shape.EllipseShape(x + (right - left) / 2, y + (up - down) / 2, xy.x, xy.y, false, color, MathJax.xypic.measure.em2px(dash) + " " + MathJax.xypic.measure.em2px(dash));
 				break;
-				
+
 			case '-':
 				if (convertToEllipse) {
 					var xy = this.radius.xy(context);
@@ -901,7 +899,7 @@ augment(AST.ObjectBox.Frame, {
 					shape = new Shape.RectangleShape(x, y, left, right, up, down, radius, false, color, undefined);
 				}
 				break;
-				
+
 			case '=':
 				if (convertToEllipse) {
 					var xy = this.radius.xy(context);
@@ -911,7 +909,7 @@ augment(AST.ObjectBox.Frame, {
 					shape = new Shape.RectangleShape(x, y, left, right, up, down, radius, true, color, undefined);
 				}
 				break;
-				
+
 			case '.':
 				if (convertToEllipse) {
 					var xy = this.radius.xy(context);
@@ -921,59 +919,59 @@ augment(AST.ObjectBox.Frame, {
 					shape = new Shape.RectangleShape(x, y, left, right, up, down, radius, false, color, MathJax.xypic.measure.dottedDasharray);
 				}
 				break;
-				
+
 			case ',':
 				var depth = this.radius.depth(context);
 				shape = new Shape.BoxShadeShape(x, y, left, right, up, down, depth, color);
 				break;
-				
+
 			case 'o':
 				var xy = this.radius.xy(context);
 				var r = xy.x;
 				shape = new Shape.EllipseShape(x + (right - left) / 2, y + (up - down) / 2, r, r, false, color, undefined);
 				break;
-				
+
 			case 'e':
 				var xy = this.radius.xy(context);
 				shape = new Shape.EllipseShape(x + (right - left) / 2, y + (up - down) / 2, xy.x, xy.y, false, color, undefined);
 				break;
-				
+
 			case '\\{':
 				shape = new Shape.LeftBrace(x - left, y, up, down, 0, color);
 				break;
-				
+
 			case '\\}':
 				shape = new Shape.LeftBrace(x + right, y, down, up, 180, color);
 				break;
-				
+
 			case '^\\}':
 			case '^\\{':
 				shape = new Shape.LeftBrace(x, y + up, right, left, 270, color);
 				break;
-				
+
 			case '_\\{':
 			case '_\\}':
 				shape = new Shape.LeftBrace(x, y - down, left, right, 90, color);
 				break;
-				
+
 			case '(':
 				shape = new Shape.LeftParenthesis(x - left, y + (up - down) / 2, up + down, 0, color);
 				break;
-				
+
 			case ')':
 				shape = new Shape.LeftParenthesis(x + right, y + (up - down) / 2, up + down, 180, color);
 				break;
-				
+
 			case '^(':
 			case '^)':
 				shape = new Shape.LeftParenthesis(x + (right - left) / 2, y + up, left + right, 270, color);
 				break;
-				
+
 			case '_(':
 			case '_)':
 				shape = new Shape.LeftParenthesis(x + (right - left) / 2, y - down, left + right, 90, color);
 				break;
-				
+
 			case '*':
 				if (c.isCircle()) {
 					var xy = this.radius.xy(context);
@@ -983,7 +981,7 @@ augment(AST.ObjectBox.Frame, {
 					shape = new Shape.RectangleShape(x, y, left, right, up, down, radius, false, "currentColor", undefined, color, true);
 				}
 				break;
-			
+
 			case '**':
 				if (c.isCircle()) {
 					var xy = this.radius.xy(context);
@@ -993,13 +991,13 @@ augment(AST.ObjectBox.Frame, {
 					shape = new Shape.RectangleShape(x, y, left, right, up, down, radius, false, "currentColor", undefined, color, false);
 				}
 				break;
-				
+
 			default:
 				return Shape.none;
 		}
-		
+
 		context.appendShapeToFront(shape);
-		
+
 		return shape;
 	},
 	toConnectShape: function (context) {
@@ -1010,14 +1008,14 @@ augment(AST.ObjectBox.Frame, {
 			Shape.none;
 		}
 		env.originalReferencePoint = c;
-		
+
 		var tmpEnv = env.duplicate();
 		tmpEnv.c = p.combineRect(c);
-		
+
 		var tmpContext = new DrawingContext(Shape.none, tmpEnv);
 		var shape = this.toDropShape(tmpContext);
 		context.appendShapeToFront(shape);
-		
+
 		return shape;
 	}
 });
@@ -1041,7 +1039,7 @@ augment(AST.ObjectBox.Frame.Radius.Default, {
 	},
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:(c.l + c.r) / 2, y:(c.u + c.d) / 2 };
+		return { x: (c.l + c.r) / 2, y: (c.u + c.d) / 2 };
 	}
 });
 
@@ -1055,7 +1053,7 @@ augment(AST.ObjectBox.Dir, {
 			return Shape.none;
 		}
 		env.c = new Frame.Point(c.x, c.y);
-		
+
 		var t = MathJax.xypic.measure.thickness;
 		var shape = Shape.none;
 		switch (this.main) {
@@ -1325,7 +1323,7 @@ augment(AST.ObjectBox.Dir, {
 			case "=>":
 				shape = new Shape.LineGT2ArrowheadShape(c, angle);
 				break;
-				
+
 			default:
 				var newdirObj = MathJax.xypic.repositories.dirRepository.get(this.main);
 				if (newdirObj !== undefined) {
@@ -1334,7 +1332,7 @@ augment(AST.ObjectBox.Dir, {
 					throw new TeXError("ExecutionError", "\\dir " + this.variant + "{" + this.main + "} not defined.");
 				}
 		}
-		
+
 		context.appendShapeToFront(shape);
 		return shape;
 	},
@@ -1375,9 +1373,9 @@ augment(AST.ObjectBox.Curve, {
 		if (objectForDrop === undefined && objectForConnect === undefined) {
 			objectForConnect = new AST.Object(List.empty, new AST.ObjectBox.Dir("", "-"));
 		}
-		
+
 		var thickness = MathJax.xypic.measure.thickness;
-		
+
 		var c = env.c;
 		var p = env.p;
 		var controlPoints = [];
@@ -1387,7 +1385,7 @@ augment(AST.ObjectBox.Curve, {
 			// 	cx:MathJax.xypic.measure.em2px(env.c.x), cy:-MathJax.xypic.measure.em2px(env.c.y), r:MathJax.xypic.measure.em2px(thickness/2)
 			// });
 		});
-		
+
 		env.c = c;
 		env.p = p;
 		var shape = Shape.none;
@@ -1405,55 +1403,55 @@ augment(AST.ObjectBox.Curve, {
 				} else {
 					return objectForDrop.toConnectShape(context);
 				}
-				
+
 			case 1:
 				var origBezier = new Curve.QuadBezier(s, controlPoints[0], e);
 				var tOfShavedStart = origBezier.tOfShavedStart(s);
 				var tOfShavedEnd = origBezier.tOfShavedEnd(e);
 				if (tOfShavedStart === undefined || tOfShavedEnd === undefined || tOfShavedStart >= tOfShavedEnd) {
-						env.angle = 0;
-						env.lastCurve = LastCurve.none;
-						return Shape.none;
+					env.angle = 0;
+					env.lastCurve = LastCurve.none;
+					return Shape.none;
 				}
 				shape = origBezier.toShape(context, objectForDrop, objectForConnect);
 				env.lastCurve = new LastCurve.QuadBezier(origBezier, tOfShavedStart, tOfShavedEnd, shape);
 				env.angle = Math.atan2(e.y - s.y, e.x - s.x);
 				break;
-				
+
 			case 2:
 				var origBezier = new Curve.CubicBezier(s, controlPoints[0], controlPoints[1], e);
 				var tOfShavedStart = origBezier.tOfShavedStart(s);
 				var tOfShavedEnd = origBezier.tOfShavedEnd(e);
 				if (tOfShavedStart === undefined || tOfShavedEnd === undefined || tOfShavedStart >= tOfShavedEnd) {
-						env.angle = 0;
-						env.lastCurve = LastCurve.none;
-						return Shape.none;
+					env.angle = 0;
+					env.lastCurve = LastCurve.none;
+					return Shape.none;
 				}
 				shape = origBezier.toShape(context, objectForDrop, objectForConnect);
 				env.lastCurve = new LastCurve.CubicBezier(origBezier, tOfShavedStart, tOfShavedEnd, shape);
 				env.angle = Math.atan2(e.y - s.y, e.x - s.x);
 				break;
-				
+
 			default:
 				var spline = new Curve.CubicBSpline(s, controlPoints, e);
 				var origBeziers = new Curve.CubicBeziers(spline.toCubicBeziers());
 				var tOfShavedStart = origBeziers.tOfShavedStart(s);
 				var tOfShavedEnd = origBeziers.tOfShavedEnd(e);
 				if (tOfShavedStart === undefined || tOfShavedEnd === undefined || tOfShavedStart >= tOfShavedEnd) {
-						env.angle = 0;
-						env.lastCurve = LastCurve.none;
-						return Shape.none;
+					env.angle = 0;
+					env.lastCurve = LastCurve.none;
+					return Shape.none;
 				}
 				shape = origBeziers.toShape(context, objectForDrop, objectForConnect);
 				env.lastCurve = new LastCurve.CubicBSpline(s, e, origBeziers, tOfShavedStart, tOfShavedEnd, shape);
 				env.angle = Math.atan2(e.y - s.y, e.x - s.x);
 				break;
 		}
-		
-//        svg.createSVGElement("rect", {
-//          x:MathJax.xypic.measure.em2px(box.x-box.l), y:MathJax.xypic.measure.em2px(-box.y-box.u), width:MathJax.xypic.measure.em2px(box.l+box.r), height:MathJax.xypic.measure.em2px(box.u+box.d),
-//          "stroke-width":"0.02em", stroke:"green"
-//        })
+
+		//        svg.createSVGElement("rect", {
+		//          x:MathJax.xypic.measure.em2px(box.x-box.l), y:MathJax.xypic.measure.em2px(-box.y-box.u), width:MathJax.xypic.measure.em2px(box.l+box.r), height:MathJax.xypic.measure.em2px(box.u+box.d),
+		//          "stroke-width":"0.02em", stroke:"green"
+		//        })
 		return shape;
 	}
 });
@@ -1521,13 +1519,13 @@ augment(AST.Coord.X, {
 		var a0 = c.y - p.y, b0 = p.x - c.x, c0 = c.x * p.y - c.y * p.x;
 		var a1 = b.y, b1 = -b.x, c1 = b.x * o.y - b.y * o.x;
 		var d = a0 * b1 - a1 * b0;
-		
+
 		if (Math.abs(d) < XypicConstants.machinePrecision) {
 			console.log("there is no intersection point.");
 			return Env.originPosition;
 		}
-		var x = -(b1 * c0 - b0 * c1)/d;
-		var y = (a1 * c0 - a0 * c1)/d;
+		var x = -(b1 * c0 - b0 * c1) / d;
+		var y = (a1 * c0 - a0 * c1) / d;
 		return new Frame.Point(x, y);
 	}
 });
@@ -1542,13 +1540,13 @@ augment(AST.Coord.Y, {
 		var a0 = c.y - p.y, b0 = p.x - c.x, c0 = c.x * p.y - c.y * p.x;
 		var a1 = b.y, b1 = -b.x, c1 = b.x * o.y - b.y * o.x;
 		var d = a0 * b1 - a1 * b0;
-		
+
 		if (Math.abs(d) < XypicConstants.machinePrecision) {
 			console.log("there is no intersection point.");
 			return Env.originPosition;
 		}
-		var x = -(b1 * c0 - b0 * c1)/d;
-		var y = (a1 * c0 - a0 * c1)/d;
+		var x = -(b1 * c0 - b0 * c1) / d;
+		var y = (a1 * c0 - a0 * c1) / d;
 		return new Frame.Point(x, y);
 	}
 });
@@ -1658,7 +1656,7 @@ augment(AST.Coord.HopsWithPlace, {
 		var id = this.prefix + row + "," + col;
 		var pos = context.env.lookupPos(id, 'in entry "' + env.xymatrixRow + "," + env.xymatrixCol + '": No ' + this + " (is " + id + ") from here.").position(context);
 		var c = env.c;
-		
+
 		var tmpEnv = env.duplicate();
 		tmpEnv.p = env.c;
 		tmpEnv.c = pos;
@@ -1676,7 +1674,7 @@ augment(AST.Coord.HopsWithPlace, {
 		tmpEnv.lastCurve = new LastCurve.Line(s, e, tmpEnv.p, tmpEnv.c, undefined);
 		var tmpContext = new DrawingContext(Shape.none, tmpEnv);
 		var t = this.place.toShape(tmpContext);
-		
+
 		return tmpEnv.lastCurve.position(t);
 	}
 });
@@ -1693,7 +1691,7 @@ augment(AST.Vector.InCurBase, {
 
 augment(AST.Vector.Abs, {
 	xy: function (context) {
-		return { x:MathJax.xypic.measure.length2em(this.x), y:MathJax.xypic.measure.length2em(this.y) };
+		return { x: MathJax.xypic.measure.length2em(this.x), y: MathJax.xypic.measure.length2em(this.y) };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1716,7 +1714,7 @@ augment(AST.Vector.Dir, {
 	xy: function (context) {
 		var l = MathJax.xypic.measure.length2em(this.dimen);
 		var angle = this.dir.angle(context);
-		return { x:l * Math.cos(angle), y:l * Math.sin(angle) };
+		return { x: l * Math.cos(angle), y: l * Math.sin(angle) };
 	},
 	angle: function (context) {
 		return this.dir.angle(context);
@@ -1726,7 +1724,7 @@ augment(AST.Vector.Dir, {
 augment(AST.Vector.Corner, {
 	xy: function (context) {
 		var xy = this.corner.xy(context);
-		return { x:xy.x*this.factor, y:xy.y*this.factor };
+		return { x: xy.x * this.factor, y: xy.y * this.factor };
 	},
 	angle: function (context) {
 		return this.corner.angle(context);
@@ -1736,7 +1734,7 @@ augment(AST.Vector.Corner, {
 augment(AST.Corner.L, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:-c.l, y:0 };
+		return { x: -c.l, y: 0 };
 	},
 	angle: function (context) {
 		return Math.PI;
@@ -1746,7 +1744,7 @@ augment(AST.Corner.L, {
 augment(AST.Corner.R, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:c.r, y:0 };
+		return { x: c.r, y: 0 };
 	},
 	angle: function (context) {
 		return 0;
@@ -1756,7 +1754,7 @@ augment(AST.Corner.R, {
 augment(AST.Corner.D, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:0, y:-c.d };
+		return { x: 0, y: -c.d };
 	},
 	angle: function (context) {
 		return -Math.PI / 2;
@@ -1766,7 +1764,7 @@ augment(AST.Corner.D, {
 augment(AST.Corner.U, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:0, y:c.u };
+		return { x: 0, y: c.u };
 	},
 	angle: function (context) {
 		return Math.PI / 2;
@@ -1776,7 +1774,7 @@ augment(AST.Corner.U, {
 augment(AST.Corner.CL, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:-c.l, y:(c.u - c.d) / 2 };
+		return { x: -c.l, y: (c.u - c.d) / 2 };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1787,7 +1785,7 @@ augment(AST.Corner.CL, {
 augment(AST.Corner.CR, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:c.r, y:(c.u - c.d) / 2 };
+		return { x: c.r, y: (c.u - c.d) / 2 };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1798,7 +1796,7 @@ augment(AST.Corner.CR, {
 augment(AST.Corner.CD, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:(c.r-c.l)/2, y:-c.d };
+		return { x: (c.r - c.l) / 2, y: -c.d };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1809,7 +1807,7 @@ augment(AST.Corner.CD, {
 augment(AST.Corner.CU, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:(c.r-c.l)/2, y:c.u };
+		return { x: (c.r - c.l) / 2, y: c.u };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1820,7 +1818,7 @@ augment(AST.Corner.CU, {
 augment(AST.Corner.LU, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:-c.l, y:c.u };
+		return { x: -c.l, y: c.u };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1831,7 +1829,7 @@ augment(AST.Corner.LU, {
 augment(AST.Corner.LD, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:-c.l, y:-c.d };
+		return { x: -c.l, y: -c.d };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1842,7 +1840,7 @@ augment(AST.Corner.LD, {
 augment(AST.Corner.RU, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:c.r, y:c.u };
+		return { x: c.r, y: c.u };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1853,7 +1851,7 @@ augment(AST.Corner.RU, {
 augment(AST.Corner.RD, {
 	xy: function (context) {
 		var c = context.env.c;
-		return { x:c.r, y:-c.d };
+		return { x: c.r, y: -c.d };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1865,8 +1863,8 @@ augment(AST.Corner.NearestEdgePoint, {
 	xy: function (context) {
 		var env = context.env;
 		var c = env.c;
-		var e = c.edgePoint(env.p.x, env.p.y);  
-		return { x:e.x - c.x, y:e.y - c.y };
+		var e = c.edgePoint(env.p.x, env.p.y);
+		return { x: e.x - c.x, y: e.y - c.y };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1879,7 +1877,7 @@ augment(AST.Corner.PropEdgePoint, {
 		var env = context.env;
 		var c = env.c;
 		var e = c.proportionalEdgePoint(env.p.x, env.p.y);
-		return { x:e.x - c.x, y:e.y - c.y };
+		return { x: e.x - c.x, y: e.y - c.y };
 	},
 	angle: function (context) {
 		var xy = this.xy(context);
@@ -1889,7 +1887,7 @@ augment(AST.Corner.PropEdgePoint, {
 
 augment(AST.Corner.Axis, {
 	xy: function (context) {
-		return { x:0, y:MathJax.xypic.measure.axisHeightLength };
+		return { x: 0, y: MathJax.xypic.measure.axisHeightLength };
 	},
 	angle: function (context) {
 		return Math.PI / 2;
@@ -1949,7 +1947,7 @@ augment(AST.Modifier.Shape.Rect, {
 	},
 	modifyShape: function (context, objectShape, restModifiers) {
 		var c = context.env.c;
-		context.env.c = new Frame.Rect(c.x, c.y, { l:c.l, r:c.r, u:c.u, d:c.d });
+		context.env.c = new Frame.Rect(c.x, c.y, { l: c.l, r: c.r, u: c.u, d: c.d });
 		return this.proceedModifyShape(context, objectShape, restModifiers);
 	}
 });
@@ -2168,8 +2166,8 @@ augment(AST.Modifier.AddOp, {
 augment(AST.Modifier.AddOp.Grow, {
 	apply: function (size, c, context) {
 		var env = context.env;
-		var margin = (size.isDefault?
-			{ x:2 * env.objectmargin, y:2 * env.objectmargin }:
+		var margin = (size.isDefault ?
+			{ x: 2 * env.objectmargin, y: 2 * env.objectmargin } :
 			size.vector.xy(context));
 		var xMargin = Math.abs(margin.x / 2);
 		var yMargin = Math.abs(margin.y / 2);
@@ -2182,8 +2180,8 @@ augment(AST.Modifier.AddOp.Grow, {
 augment(AST.Modifier.AddOp.Shrink, {
 	apply: function (size, c, context) {
 		var env = context.env;
-		var margin = (size.isDefault?
-			{ x:2 * env.objectmargin, y:2 * env.objectmargin }:
+		var margin = (size.isDefault ?
+			{ x: 2 * env.objectmargin, y: 2 * env.objectmargin } :
 			size.vector.xy(context));
 		var xMargin = -Math.abs(margin.x / 2);
 		var yMargin = -Math.abs(margin.y / 2);
@@ -2196,8 +2194,8 @@ augment(AST.Modifier.AddOp.Shrink, {
 augment(AST.Modifier.AddOp.Set, {
 	apply: function (size, c, context) {
 		var env = context.env;
-		var margin = (size.isDefault?
-			{ x:env.objectwidth, y:env.objectheight }:
+		var margin = (size.isDefault ?
+			{ x: env.objectwidth, y: env.objectheight } :
 			size.vector.xy(context));
 		var width = Math.abs(margin.x);
 		var height = Math.abs(margin.y);
@@ -2210,7 +2208,7 @@ augment(AST.Modifier.AddOp.Set, {
 augment(AST.Modifier.AddOp.GrowTo, {
 	apply: function (size, c, context) {
 		var l = Math.max(c.l + c.r, c.u + c.d);
-		var margin = (size.isDefault? { x:l, y:l } : size.vector.xy(context));
+		var margin = (size.isDefault ? { x: l, y: l } : size.vector.xy(context));
 		var width = Math.abs(margin.x);
 		var height = Math.abs(margin.y);
 		return c.growTo(width, height);
@@ -2222,7 +2220,7 @@ augment(AST.Modifier.AddOp.GrowTo, {
 augment(AST.Modifier.AddOp.ShrinkTo, {
 	apply: function (size, c, context) {
 		var l = Math.min(c.l + c.r, c.u + c.d);
-		var margin = (size.isDefault? { x:l, y:l } : size.vector.xy(context));
+		var margin = (size.isDefault ? { x: l, y: l } : size.vector.xy(context));
 		var width = Math.abs(margin.x);
 		var height = Math.abs(margin.y);
 		return c.shrinkTo(width, height);
@@ -2243,7 +2241,7 @@ augment(AST.Modifier.Shape.Frame, {
 			var colorName = "currentColor";
 			this.options.foreach(function (op) { radius = op.getRadius(radius); });
 			this.options.foreach(function (op) { colorName = op.getColorName(colorName); });
-			
+
 			var dummyEnv = env.duplicate();
 			var dummyContext = new DrawingContext(Shape.none, dummyEnv);
 			var frameObject = new AST.ObjectBox.Frame(radius, this.main);
@@ -2318,7 +2316,7 @@ augment(AST.Direction.RotVector, {
 
 augment(AST.Direction.RotCW, {
 	rotate: function (angle, context) {
-		return angle + Math.PI /2;
+		return angle + Math.PI / 2;
 	}
 });
 
@@ -2334,7 +2332,7 @@ augment(AST.Diag.Default, {
 		return context.env.angle;
 	}
 });
-	
+
 augment(AST.Diag.Angle, {
 	isEmpty: false,
 	angle: function (context) {
@@ -2414,7 +2412,7 @@ augment(AST.Command.Ar, {
 		var yBase = env.yBase;
 		var p = env.p;
 		var c = env.c;
-		
+
 		env.pathActionForBeforeSegment = Option.empty;
 		env.pathActionForAfterSegment = Option.empty;
 		env.labelsForNextSegmentOnly = Option.empty;
@@ -2422,18 +2420,18 @@ augment(AST.Command.Ar, {
 		env.labelsForEverySegment = Option.empty;
 		env.segmentSlideEm = Option.empty;
 		env.lastTurnDiag = Option.empty;
-		
+
 		env.arrowVariant = "";
 		env.tailTip = new AST.Command.Ar.Form.Tip.Tipchars("");
 		env.headTip = new AST.Command.Ar.Form.Tip.Tipchars(">");
 		env.stemConn = new AST.Command.Ar.Form.Conn.Connchars("-");
 		env.reverseAboveAndBelow = false;
 		env.arrowObjectModifiers = List.empty;
-		
+
 		this.forms.foreach(function (f) { f.toShape(context); });
-		
+
 		if (!env.pathActionForBeforeSegment.isDefined) {
-		// the following AST means **\dir{stem}.
+			// the following AST means **\dir{stem}.
 			env.pathActionForBeforeSegment = new Option.Some(
 				new AST.PosDecor(
 					new AST.Pos.Coord(
@@ -2441,7 +2439,7 @@ augment(AST.Command.Ar, {
 						List.empty.append(
 							new AST.Pos.ConnectObject(
 								new AST.Object(
-									env.arrowObjectModifiers, 
+									env.arrowObjectModifiers,
 									env.stemConn.getObject(context)
 								)
 							)
@@ -2451,7 +2449,7 @@ augment(AST.Command.Ar, {
 				)
 			);
 		}
-		
+
 		env.labelsForNextSegmentOnly = new Option.Some(
 			new AST.Command.Path.Labels(
 				List.empty.append(
@@ -2463,7 +2461,7 @@ augment(AST.Command.Ar, {
 				)
 			)
 		);
-		
+
 		// arrow head
 		env.labelsForLastSegmentOnly = new Option.Some(
 			new AST.Command.Path.Labels(
@@ -2476,9 +2474,9 @@ augment(AST.Command.Ar, {
 				)
 			)
 		);
-		
+
 		this.path.toShape(context);
-		
+
 		env.c = c;
 		env.p = p;
 		env.origin = origin;
@@ -2641,18 +2639,18 @@ augment(AST.Command.Ar.Form.CurveWithControlPoints, {
 		this.coord.position(tmpContext);
 		var positions = tmpEnv.endCapturePositions();
 		positions = positions.append(tmpEnv.c);
-		
+
 		var points = List.empty;
 		positions.reverse().foreach(function (pos) {
 			var xy = env.inverseAbsVector(pos.x, pos.y);
 			points = points.prepend(new AST.ObjectBox.Curve.PosList.Pos(
-									new AST.Pos.Coord(
-										new AST.Coord.Vector(new AST.Vector.InCurBase(xy.x, xy.y)),
-										List.empty
-									)
-								));
+				new AST.Pos.Coord(
+					new AST.Coord.Vector(new AST.Vector.InCurBase(xy.x, xy.y)),
+					List.empty
+				)
+			));
 		});
-		
+
 		// the following AST means **\crv{ control points }.
 		env.pathActionForBeforeSegment = new Option.Some(
 			new AST.PosDecor(
@@ -2715,12 +2713,12 @@ augment(AST.Command.Ar.Form.LabelAbove, {
 		var label;
 		if (env.reverseAboveAndBelow) {
 			label = new AST.Command.Path.Label.Below(
-						new AST.Pos.Place(this.anchor), this.it, Option.empty
-					);
+				new AST.Pos.Place(this.anchor), this.it, Option.empty
+			);
 		} else {
 			label = new AST.Command.Path.Label.Above(
-						new AST.Pos.Place(this.anchor), this.it, Option.empty
-					);
+				new AST.Pos.Place(this.anchor), this.it, Option.empty
+			);
 		}
 		env.labelsForEverySegment = new Option.Some(
 			new AST.Command.Path.Labels(List.empty.append(label))
@@ -2734,12 +2732,12 @@ augment(AST.Command.Ar.Form.LabelBelow, {
 		var label;
 		if (env.reverseAboveAndBelow) {
 			label = new AST.Command.Path.Label.Above(
-						new AST.Pos.Place(this.anchor), this.it, Option.empty
-					);
+				new AST.Pos.Place(this.anchor), this.it, Option.empty
+			);
 		} else {
 			label = new AST.Command.Path.Label.Below(
-						new AST.Pos.Place(this.anchor), this.it, Option.empty
-					);
+				new AST.Pos.Place(this.anchor), this.it, Option.empty
+			);
 		}
 		env.labelsForEverySegment = new Option.Some(
 			new AST.Command.Path.Labels(List.empty.append(label))
@@ -2817,7 +2815,7 @@ augment(AST.Command.Path, {
 		var yBase = env.yBase;
 		var p = env.p;
 		var c = env.c;
-		
+
 		env.pathActionForBeforeSegment = Option.empty;
 		env.pathActionForAfterSegment = Option.empty;
 		env.labelsForNextSegmentOnly = Option.empty;
@@ -2825,9 +2823,9 @@ augment(AST.Command.Path, {
 		env.labelsForEverySegment = Option.empty;
 		env.segmentSlideEm = Option.empty;
 		env.lastTurnDiag = Option.empty;
-		
+
 		this.path.toShape(context);
-		
+
 		env.c = c;
 		env.p = p;
 		env.origin = origin;
@@ -2940,10 +2938,10 @@ augment(AST.Command.Path.TurningSegment, {
 		var circle = this.turn.explicitizedCircle(context);
 		var r = this.turn.radius.radius(context);
 		env.lastTurnDiag = new Option.Some(circle.endDiag);
-		
+
 		var sv = circle.startVector(context);
 		var ev = circle.endVector(context);
-		
+
 		var slideEm = env.segmentSlideEm.getOrElse(0);
 		this.segment.slide.dimen.foreach(function (d) {
 			slideEm = MathJax.xypic.measure.length2em(d);
@@ -2962,14 +2960,14 @@ augment(AST.Command.Path.TurningSegment, {
 				r = Math.max(0, r + slideEm);
 			}
 		}
-		
+
 		var s = env.p.edgePoint(env.p.x + sv.x, env.p.y + sv.y);
 		var e = env.c;
-		
+
 		var ds = circle.relativeStartPoint(context, r);
 		var de = circle.relativeEndPoint(context, r);
-		var deo = circle.relativeEndPoint(context, r + (circle.orient === "^"? slideEm : -slideEm));
-		
+		var deo = circle.relativeEndPoint(context, r + (circle.orient === "^" ? slideEm : -slideEm));
+
 		var t;
 		var det = sv.x * ev.y - sv.y * ev.x;
 		if (Math.abs(det) < XypicConstants.machinePrecision) {
@@ -2977,16 +2975,16 @@ augment(AST.Command.Path.TurningSegment, {
 		} else {
 			var dx = e.x - s.x + ds.x - de.x;
 			var dy = e.y - s.y + ds.y - de.y;
-			t = (ev.y * dx - ev.x * dy)/det;
+			t = (ev.y * dx - ev.x * dy) / det;
 			if (t < 0) { t = 0; }
 		}
 		var x = s.x - ds.x + t * sv.x;
 		var y = s.y - ds.y + t * sv.y;
-		
+
 		var circleShape = circle.toDropShape(context, x, y, r);
-		
+
 		var c = new Frame.Point(x + deo.x, y + deo.y);
-		
+
 		env.c = new Frame.Point(x + ds.x, y + ds.y);
 		env.pathActionForBeforeSegment.foreach(function (action) {
 			action.toShape(context);
@@ -3002,7 +3000,7 @@ augment(AST.Command.Path.TurningSegment, {
 		env.pathActionForAfterSegment.foreach(function (action) {
 			action.toShape(context);
 		});
-		
+
 		this.segment.toLabelsShape(context);
 	}
 });
@@ -3029,23 +3027,23 @@ augment(AST.Command.Path.Turn.Cir, {
 augment(AST.ObjectBox.Cir.Cir.Segment, {
 	startVector: function (context) {
 		var angle = this.startDiag.angle(context);
-		return { x:Math.cos(angle), y:Math.sin(angle) };
+		return { x: Math.cos(angle), y: Math.sin(angle) };
 	},
 	endVector: function (context) {
 		var angle = this.endDiag.angle(context);
-		return { x:Math.cos(angle), y:Math.sin(angle) };
+		return { x: Math.cos(angle), y: Math.sin(angle) };
 	},
 	relativeStartPointAngle: function (context) {
 		return this.startPointDegree(context) / 180 * Math.PI;
 	},
 	relativeStartPoint: function (context, r) {
 		var angle = this.startPointDegree(context) / 180 * Math.PI;
-		return { x:r * Math.cos(angle), y:r * Math.sin(angle) };
+		return { x: r * Math.cos(angle), y: r * Math.sin(angle) };
 	},
 	relativeEndPoint: function (context, r) {
 		var angle;
 		angle = this.endPointDegree(context, this.relativeStartPointAngle(context)) / 180 * Math.PI;
-		return { x:r * Math.cos(angle), y:r * Math.sin(angle) };
+		return { x: r * Math.cos(angle), y: r * Math.sin(angle) };
 	}
 });
 
@@ -3060,7 +3058,7 @@ augment(AST.Command.Path.Turn.Diag, {
 		}
 		var angle = startDiag.angle(context);
 		var det = (env.c.x - env.p.x) * Math.sin(angle) - (env.c.y - env.p.y) * Math.cos(angle);
-		orient = (det < 0? "^" : "_");
+		orient = (det < 0 ? "^" : "_");
 		endDiag = startDiag.turn(orient);
 		return new AST.ObjectBox.Cir.Cir.Segment(startDiag, orient, endDiag);
 	}
@@ -3085,7 +3083,7 @@ augment(AST.Command.Path.Segment, {
 		this.pos.toShape(context);
 		var p = env.p;
 		var c = env.c;
-		
+
 		var tx = c.x - p.x;
 		var ty = c.y - p.y;
 		var angle = Math.atan2(ty, tx) + Math.PI / 2;
@@ -3098,7 +3096,7 @@ augment(AST.Command.Path.Segment, {
 			p = p.move(p.x + slideEm * Math.cos(angle), p.y + slideEm * Math.sin(angle));
 			c = c.move(c.x + slideEm * Math.cos(angle), c.y + slideEm * Math.sin(angle));
 		}
-		
+
 		env.p = p;
 		env.c = c;
 	},
@@ -3130,9 +3128,9 @@ augment(AST.Command.Path.Label, {
 			var lastCurve = env.lastCurve;
 			var angle;
 			if (!lastCurve.isNone) {
-				angle = lastCurve.angle(t) + Math.PI/2 + (labelmargin > 0? 0 : Math.PI);
+				angle = lastCurve.angle(t) + Math.PI / 2 + (labelmargin > 0 ? 0 : Math.PI);
 			} else {
-				angle = Math.atan2(c.y - p.y, c.x - p.x) + Math.PI/2;
+				angle = Math.atan2(c.y - p.y, c.x - p.x) + Math.PI / 2;
 			}
 			var c = env.c;
 			var subcontext = new DrawingContext(Shape.none, env);
@@ -3146,7 +3144,7 @@ augment(AST.Command.Path.Label, {
 				var r = bbox.r;
 				var u = bbox.u;
 				var d = bbox.d;
-				
+
 				var cos = Math.cos(angle);
 				var sin = Math.sin(angle);
 				var delta = Math.min(
@@ -3163,7 +3161,7 @@ augment(AST.Command.Path.Label, {
 			this.it.toDropShape(context);
 		}
 		var lastCurve = env.lastCurve;
-		
+
 		if (this.shouldSliceHole && lastCurve.isDefined && t !== undefined) {
 			lastCurve.sliceHole(env.c, t);
 		}
@@ -3200,7 +3198,7 @@ augment(AST.Command.Xymatrix, {
 		if (origEnv.c === undefined) {
 			return Shape.none;
 		}
-		
+
 		var subEnv = origEnv.duplicate();
 		var subcontext = new DrawingContext(Shape.none, subEnv);
 		subEnv.xymatrixPrefix = "";
@@ -3212,11 +3210,11 @@ augment(AST.Command.Xymatrix, {
 		subEnv.xymatrixFixedCol = false;
 		subEnv.xymatrixOrientationAngle = 0;
 		subEnv.xymatrixEntryModifiers = List.empty;
-		
+
 		this.setup.foreach(function (sw) { sw.toShape(subcontext); });
-		
+
 		var orientation = subEnv.xymatrixOrientationAngle;
-		
+
 		var rowCount;
 		var columnCount = 0;
 		var rownum = 0, colnum;
@@ -3228,7 +3226,7 @@ augment(AST.Command.Xymatrix, {
 					row.entries.map(function (entry) {
 						colnum += 1;
 						var localEnv = subEnv.duplicate();
-						localEnv.origin = {x:0, y:0};
+						localEnv.origin = { x: 0, y: 0 };
 						localEnv.p = localEnv.c = Env.originPosition;
 						localEnv.angle = 0;
 						localEnv.lastCurve = LastCurve.none;
@@ -3254,7 +3252,7 @@ augment(AST.Command.Xymatrix, {
 							l = c.l;
 							r = c.r;
 						}
-						var frame = new Frame.Rect(0, 0, { l:l, r:r, u:u, d:d });
+						var frame = new Frame.Rect(0, 0, { l: l, r: r, u: u, d: d });
 						return new Xymatrix.Entry(localEnv.c, shape, entry.decor, frame);
 					}),
 					orientation
@@ -3265,24 +3263,24 @@ augment(AST.Command.Xymatrix, {
 			orientation
 		);
 		rowCount = rownum;
-		
+
 		if (rowCount === 0) {
 			return Shape.none;
 		}
-		
+
 		var colnum;
 		matrix.rows.foreach(function (row) {
 			colnum = 0;
-			row.entries.foreach (function (entry) {
+			row.entries.foreach(function (entry) {
 				colnum += 1;
 				var column = matrix.getColumn(colnum);
 				column.addEntry(entry);
 			});
 		});
-		
+
 		/*
 		console.log(matrix.toString());
-		
+
 		var rownum = 0;
 		matrix.rows.foreach(function (row) {
 			rownum += 1;
@@ -3294,7 +3292,7 @@ augment(AST.Command.Xymatrix, {
 			console.log("column[" + colnum + "] #" + col.entries.length() + " l:" + col.getL() + ", r:" + col.getR());
 		})
 		*/
-		
+
 		var colsep = subEnv.xymatrixColSepEm;
 		var xs = [];
 		var x = origEnv.c.x;
@@ -3323,7 +3321,7 @@ augment(AST.Command.Xymatrix, {
 			l = matrix.columns.head.getL();
 			r = x + matrix.columns.at(columnCount - 1).getR() - xs[0];
 		}
-		
+
 		var rowsep = subEnv.xymatrixRowSepEm;
 		var ys = [];
 		var y = origEnv.c.y;
@@ -3352,15 +3350,15 @@ augment(AST.Command.Xymatrix, {
 			u = matrix.rows.head.getU();
 			d = ys[0] - y + matrix.rows.at(rowCount - 1).getD();
 		}
-		origEnv.c = new Frame.Rect(origEnv.c.x, origEnv.c.y, { l:l, r:r, u:u, d:d });
-		
+		origEnv.c = new Frame.Rect(origEnv.c.x, origEnv.c.y, { l: l, r: r, u: u, d: d });
+
 		var prefix = subEnv.xymatrixPrefix;
 		var cos = Math.cos(orientation);
 		var sin = Math.sin(orientation);
 		var rowIndex = 0;
 		matrix.rows.foreach(function (row) {
 			var colIndex = 0;
-			row.entries.foreach (function (entry) {
+			row.entries.foreach(function (entry) {
 				var x0 = xs[colIndex];
 				var y0 = ys[rowIndex];
 				var x = x0 * cos - y0 * sin;
@@ -3374,12 +3372,12 @@ augment(AST.Command.Xymatrix, {
 			});
 			rowIndex += 1;
 		});
-		
+
 		subcontext = new DrawingContext(Shape.none, subEnv);
 		var rowIndex = 0;
 		matrix.rows.foreach(function (row) {
 			var colIndex = 0;
-			row.entries.foreach (function (entry) {
+			row.entries.foreach(function (entry) {
 				var x0 = xs[colIndex];
 				var y0 = ys[rowIndex];
 				var x = x0 * cos - y0 * sin;
@@ -3400,7 +3398,7 @@ augment(AST.Command.Xymatrix, {
 		var matrixShape = subcontext.shape;
 		context.appendShapeToFront(matrixShape);
 		origEnv.savedPosition = subEnv.savedPosition;
-		
+
 		return matrixShape;
 	}
 });
@@ -3694,26 +3692,26 @@ augment(AST.Command.Twocell, {
 		if (origEnv.c === undefined) {
 			return Shape.none;
 		}
-		
+
 		var subEnv = origEnv.duplicate();
 		var subcontext = new DrawingContext(Shape.none, subEnv);
 		subEnv.twocellmodmapobject = origEnv.twocellmodmapobject || new AST.Object(List.empty, new AST.ObjectBox.Dir("", "|"));
 		subEnv.twocellhead = origEnv.twocellhead || new AST.Object(List.empty, new AST.ObjectBox.Dir("", ">"));
 		subEnv.twocelltail = origEnv.twocelltail || new AST.Object(List.empty, new AST.ObjectBox.Dir("", ""));
 		subEnv.twocellarrowobject = origEnv.twocellarrowobject || new AST.Object(List.empty, new AST.ObjectBox.Dir("", "=>"));
-		
+
 		subEnv.twocellUpperCurveObjectSpacer = origEnv.twocellUpperCurveObjectSpacer;
 		subEnv.twocellUpperCurveObject = origEnv.twocellUpperCurveObject;
 		subEnv.twocellLowerCurveObjectSpacer = origEnv.twocellLowerCurveObjectSpacer;
 		subEnv.twocellLowerCurveObject = origEnv.twocellLowerCurveObject;
-		
+
 		// temporary attributes
 		subEnv.twocellUpperLabel = Option.empty;
 		subEnv.twocellLowerLabel = Option.empty;
 		subEnv.twocellCurvatureEm = Option.empty;
 		subEnv.twocellShouldDrawCurve = true;
 		subEnv.twocellShouldDrawModMap = false;
-		
+
 		this.switches.foreach(function (sw) { sw.setup(subcontext); });
 		this.twocell.toShape(subcontext, this.arrow);
 		context.appendShapeToFront(subcontext.shape);
@@ -3725,32 +3723,32 @@ augment(AST.Command.Twocell.Hops2cell, {
 		var env = context.env;
 		var c = env.c;
 		var angle = env.angle;
-		
+
 		var s = env.c;
 		var e = this.targetPosition(context);
 		if (s === undefined || e === undefined) {
 			return;
 		}
-		
+
 		var dx = e.x - s.x;
 		var dy = e.y - s.y;
 		if (dx === 0 && dy === 0) {
 			return;
 		}
-		
+
 		var m = new Frame.Point(
-				s.x + dx * 0.5,
-				s.y + dy * 0.5
-			);
+			s.x + dx * 0.5,
+			s.y + dy * 0.5
+		);
 		var tangle = Math.atan2(dy, dx);
 		var antiClockwiseAngle = tangle + Math.PI / 2;
-		
+
 		var curvatureEm = env.twocellCurvatureEm.getOrElse(this.getDefaultCurvature());
 		var ncos = Math.cos(antiClockwiseAngle);
 		var nsin = Math.sin(antiClockwiseAngle);
 		var ucp = this.getUpperControlPoint(s, e, m, curvatureEm, ncos, nsin);
 		var lcp = this.getLowerControlPoint(s, e, m, curvatureEm, ncos, nsin);
-		
+
 		if (env.twocellShouldDrawCurve) {
 			// upper curve
 			var objectForDrop = env.twocellUpperCurveObjectSpacer;
@@ -3776,7 +3774,7 @@ augment(AST.Command.Twocell.Hops2cell, {
 					arrow.toUpperTipsShape(context);
 				}
 			}
-			
+
 			// lower curve
 			var objectForDrop = env.twocellLowerCurveObjectSpacer;
 			var objectForConnect;
@@ -3802,12 +3800,12 @@ augment(AST.Command.Twocell.Hops2cell, {
 				}
 			}
 		}
-		
+
 		env.c = this.getDefaultArrowPoint(s, e, m, curvatureEm, ncos, nsin);
 		env.angle = antiClockwiseAngle + Math.PI;
 		var labelOrigin = m;
 		arrow.toArrowShape(context, labelOrigin);
-		
+
 		env.c = c;
 		env.angle = angle;
 	},
@@ -3877,11 +3875,11 @@ augment(AST.Command.Twocell.Twocell, {
 		);
 	},
 	getUpperLabelAngle: function (antiClockwiseAngle, s, e, midPoint, curvatureEm, ncos, nsin) {
-		var rot = (curvatureEm < 0? Math.PI : 0);
+		var rot = (curvatureEm < 0 ? Math.PI : 0);
 		return antiClockwiseAngle + rot;
 	},
 	getLowerLabelAngle: function (antiClockwiseAngle, s, e, midPoint, curvatureEm, ncos, nsin) {
-		var rot = (curvatureEm < 0? 0 : Math.PI);
+		var rot = (curvatureEm < 0 ? 0 : Math.PI);
 		return antiClockwiseAngle + rot;
 	},
 	getDefaultArrowPoint: function (s, e, midPoint, curvatureEm, ncos, nsin) {
@@ -3918,11 +3916,11 @@ augment(AST.Command.Twocell.UpperTwocell, {
 		return midPoint;
 	},
 	getUpperLabelAngle: function (antiClockwiseAngle, s, e, midPoint, curvatureEm, ncos, nsin) {
-		var rot = (curvatureEm < 0? Math.PI : 0);
+		var rot = (curvatureEm < 0 ? Math.PI : 0);
 		return antiClockwiseAngle + rot;
 	},
 	getLowerLabelAngle: function (antiClockwiseAngle, s, e, midPoint, curvatureEm, ncos, nsin) {
-		var rot = (curvatureEm < 0? 0 : Math.PI);
+		var rot = (curvatureEm < 0 ? 0 : Math.PI);
 		return antiClockwiseAngle + rot;
 	},
 	getDefaultArrowPoint: function (s, e, midPoint, curvatureEm, ncos, nsin) {
@@ -3968,11 +3966,11 @@ augment(AST.Command.Twocell.LowerTwocell, {
 		);
 	},
 	getUpperLabelAngle: function (antiClockwiseAngle, s, e, midPoint, curvatureEm, ncos, nsin) {
-		var rot = (curvatureEm < 0? 0 : Math.PI);
+		var rot = (curvatureEm < 0 ? 0 : Math.PI);
 		return antiClockwiseAngle + rot;
 	},
 	getLowerLabelAngle: function (antiClockwiseAngle, s, e, midPoint, curvatureEm, ncos, nsin) {
-		var rot = (curvatureEm < 0? Math.PI : 0);
+		var rot = (curvatureEm < 0 ? Math.PI : 0);
 		return antiClockwiseAngle + rot;
 	},
 	getDefaultArrowPoint: function (s, e, midPoint, curvatureEm, ncos, nsin) {
@@ -4037,14 +4035,14 @@ augment(AST.Command.Twocell.CompositeMap, {
 		var dx = e.x - midPoint.x + curvatureEm * ncos;
 		var dy = e.y - midPoint.y + curvatureEm * nsin;
 		var angle = Math.atan2(dy, dx);
-		var rot = (curvatureEm < 0? Math.PI : 0);
+		var rot = (curvatureEm < 0 ? Math.PI : 0);
 		return angle + Math.PI / 2 + rot;
 	},
 	getLowerLabelAngle: function (antiClockwiseAngle, s, e, midPoint, curvatureEm, ncos, nsin) {
 		var dx = midPoint.x + curvatureEm * ncos - s.x;
 		var dy = midPoint.y + curvatureEm * nsin - s.y;
 		var angle = Math.atan2(dy, dx);
-		var rot = (curvatureEm < 0? Math.PI : 0);
+		var rot = (curvatureEm < 0 ? Math.PI : 0);
 		return angle + Math.PI / 2 + rot;
 	},
 	getDefaultArrowPoint: function (s, e, midPoint, curvatureEm, ncos, nsin) {
@@ -4179,7 +4177,7 @@ augment(AST.Command.Twocell.Label, {
 		} else {
 			offset = this.getDefaultLabelOffset();
 		}
-		
+
 		var env = context.env;
 		var c = env.c;
 		env.c = new Frame.Point(
@@ -4189,7 +4187,7 @@ augment(AST.Command.Twocell.Label, {
 		var labelObject = this.labelObject;
 		labelObject.toDropShape(context);
 		env.c = c;
-		
+
 	},
 	getDefaultLabelOffset: function () { return MathJax.xypic.measure.lineElementLength; }
 });
@@ -4208,14 +4206,14 @@ augment(AST.Command.Twocell.Arrow, {
 		var lastCurve = env.lastCurve;
 		var c = env.c;
 		var angle = env.angle;
-		
-		var rot = (reversed? Math.PI : 0);
-		var t = lastCurve.tOfPlace(true, true, (reversed? 0 : 1), 0);
+
+		var rot = (reversed ? Math.PI : 0);
+		var t = lastCurve.tOfPlace(true, true, (reversed ? 0 : 1), 0);
 		env.c = lastCurve.position(t);
 		env.angle = lastCurve.angle(t) + rot;
 		env.twocellhead.toDropShape(context);
-		
-		var t = lastCurve.tOfPlace(true, true, (reversed? 1 : 0), 0);
+
+		var t = lastCurve.tOfPlace(true, true, (reversed ? 1 : 0), 0);
 		env.c = lastCurve.position(t);
 		env.angle = lastCurve.angle(t) + rot;
 		if (doubleHeaded) {
@@ -4223,14 +4221,14 @@ augment(AST.Command.Twocell.Arrow, {
 		} else {
 			env.twocelltail.toDropShape(context);
 		}
-		
+
 		if (env.twocellShouldDrawModMap) {
 			var t = lastCurve.tOfPlace(false, false, 0.5, 0);
 			env.c = lastCurve.position(t);
 			env.angle = lastCurve.angle(t) + rot;
 			env.twocellmodmapobject.toDropShape(context);
 		}
-		
+
 		env.c = c;
 		env.angle = angle;
 	}
@@ -4277,7 +4275,7 @@ augment(AST.Command.Twocell.Arrow.WithOrientation, {
 				break;
 		}
 	},
-	toArrowShape: function(context, labelOrigin) {
+	toArrowShape: function (context, labelOrigin) {
 		var env = context.env;
 		var c = env.c;
 		switch (this.tok) {
@@ -4327,7 +4325,7 @@ augment(AST.Command.Twocell.Arrow.WithPosition, {
 	toLowerTipsShape: function (context) {
 		this.toTipsShape(context, false, false);
 	},
-	toArrowShape: function(context, labelOrigin) {
+	toArrowShape: function (context, labelOrigin) {
 		var env = context.env;
 		var c = env.c;
 		var angle = env.angle;
@@ -4342,7 +4340,7 @@ augment(AST.Command.Twocell.Arrow.WithPosition, {
 				labelOrigin.y + offset * Math.sin(angle)
 			);
 		}
-		
+
 		env.c = arrowPos;
 		env.twocellarrowobject.toDropShape(context);
 		if (!nudge.isOmit) {
@@ -4362,38 +4360,38 @@ augment(AST.Pos.Xyimport.TeXCommand, {
 		if (origEnv.c === undefined) {
 			return Shape.none;
 		}
-		
+
 		var subEnv = origEnv.duplicate();
 		var subcontext = new DrawingContext(Shape.none, subEnv);
 		var shape = this.graphics.toDropShape(subcontext);
-		
+
 		var xyWidth = this.width;
 		var xyHeight = this.height;
 		if (xyWidth === 0 || xyHeight === 0) {
 			throw new TeXError("ExecutionError", "the 'width' and 'height' attributes of the \\xyimport should be non-zero.");
 		}
-		
+
 		var c = subEnv.c;
 		var imageWidth = c.l + c.r;
 		var imageHeight = c.u + c.d;
-		
+
 		if (imageWidth === 0 || imageHeight === 0) {
 			throw new TeXError("ExecutionError", "the width and height of the graphics to import should be non-zero.");
 		}
-		
+
 		var xOffset = this.xOffset;
 		var yOffset = this.yOffset;
-		
+
 		origEnv.c = c.toRect({
-			u:imageHeight / xyHeight * (xyHeight - yOffset),
-			d:imageHeight / xyHeight * yOffset,
-			l:imageWidth / xyWidth * xOffset,
-			r:imageWidth / xyWidth * (xyWidth - xOffset)
+			u: imageHeight / xyHeight * (xyHeight - yOffset),
+			d: imageHeight / xyHeight * yOffset,
+			l: imageWidth / xyWidth * xOffset,
+			r: imageWidth / xyWidth * (xyWidth - xOffset)
 		});
-		
+
 		origEnv.setXBase(imageWidth / xyWidth, 0);
 		origEnv.setYBase(0, imageHeight / xyHeight);
-		
+
 		var dx = c.l - origEnv.c.l;
 		var dy = c.d - origEnv.c.d;
 		var shape = new Shape.TranslateShape(dx, dy, subcontext.shape);
@@ -4407,16 +4405,16 @@ augment(AST.Pos.Xyimport.Graphics, {
 		if (origEnv.c === undefined) {
 			return Shape.none;
 		}
-		
+
 		var subEnv = origEnv.duplicate();
 		var subcontext = new DrawingContext(Shape.none, subEnv);
-		
+
 		var xyWidth = this.width;
 		var xyHeight = this.height;
 		if (xyWidth === 0 || xyHeight === 0) {
 			throw new TeXError("ExecutionError", "the 'width' and 'height' attributes of the \\xyimport should be non-zero.");
 		}
-		
+
 		var graphics = this.graphics;
 		graphics.setup(subcontext);
 		if (!subEnv.includegraphicsWidth.isDefined || !subEnv.includegraphicsHeight.isDefined) {
@@ -4424,24 +4422,24 @@ augment(AST.Pos.Xyimport.Graphics, {
 		}
 		var imageWidth = subEnv.includegraphicsWidth.get;
 		var imageHeight = subEnv.includegraphicsHeight.get;
-		
+
 		if (imageWidth === 0 || imageHeight === 0) {
 			throw new TeXError("ExecutionError", "the 'width' and 'height' attributes of the \\includegraphics should be non-zero.");
 		}
-		
+
 		var xOffset = this.xOffset;
 		var yOffset = this.yOffset;
-		
+
 		origEnv.c = subEnv.c.toRect({
-			u:imageHeight / xyHeight * (xyHeight - yOffset),
-			d:imageHeight / xyHeight * yOffset,
-			l:imageWidth / xyWidth * xOffset,
-			r:imageWidth / xyWidth * (xyWidth - xOffset)
+			u: imageHeight / xyHeight * (xyHeight - yOffset),
+			d: imageHeight / xyHeight * yOffset,
+			l: imageWidth / xyWidth * xOffset,
+			r: imageWidth / xyWidth * (xyWidth - xOffset)
 		});
-		
+
 		origEnv.setXBase(imageWidth / xyWidth, 0);
 		origEnv.setYBase(0, imageHeight / xyHeight);
-		
+
 		var imageShape = new Shape.ImageShape(origEnv.c, graphics.filepath);
 		context.appendShapeToFront(imageShape);
 	}
@@ -4452,7 +4450,7 @@ augment(AST.Command.Includegraphics, {
 		var env = context.env;
 		env.includegraphicsWidth = Option.empty;
 		env.includegraphicsHeight = Option.empty;
-		
+
 		this.attributeList.foreach(function (attr) {
 			attr.setup(context);
 		});
